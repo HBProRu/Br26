@@ -261,11 +261,9 @@ void Temperature(){// reads the DS18B20 temerature probe
 
 	// start conversion and return
 	if (!(Conv_start)){
-		//    Serial.println("Conv_start");
 		ds.write(0x44, 0);
 		Conv_start = true;
-		//return;
-		delay(500);
+		return;
 	}
 	if (Conv_start){// check for conversion if it isn't complete return if it is then convert to decimal
 		//    Serial.println("Conv_start = true");
