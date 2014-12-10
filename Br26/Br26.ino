@@ -84,7 +84,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.*/
 //#include <SD.h>
 #include <Wire.h>
 //#include <Serial.h>
-//#include <Adafruit_CC3000.h>
+#include <Adafruit_CC3000.h>
 #include <ccspi.h>
 #include <SPI.h>
 #include <string.h>
@@ -95,7 +95,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.*/
 #include <Uniholic.h>
 //#include <floatToString.h>
 #include "DS1307_Wire.h"
-//#include "WiFi_CC3000.h"
+#include "WiFi_CC3000.h"
 
 // SETTING PCB*****
 // Select your PCB Version
