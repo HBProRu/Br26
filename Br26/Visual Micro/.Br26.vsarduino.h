@@ -38,14 +38,14 @@
             
 typedef unsigned char byte;
 extern "C" void __cxa_pure_virtual() {;}
-#include "C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\arduino.h"
-#include "C:\Program Files (x86)\Arduino\hardware\arduino\avr\variants\uniholicv15\pins_arduino.h" 
-#include "d:\Gits\Br26\Br26\Br26.ino"
-#include "d:\Gits\Br26\Br26\ArdBir1.h"
-#include "d:\Gits\Br26\Br26\DS1307_Wire.h"
-#include "d:\Gits\Br26\Br26\Functions.h"
-#include "d:\Gits\Br26\Br26\LCD20x4_RUS.h"
-#include "d:\Gits\Br26\Br26\Pcb_Uniholic.h"
-#include "d:\Gits\Br26\Br26\Presentazione.h"
-#include "d:\Gits\Br26\Br26\WiFi_CC3000.h"
+#include "c:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\arduino.h"
+#include "c:\Program Files (x86)\Arduino\hardware\arduino\avr\variants\uniholicv15\pins_arduino.h" 
+#include "D:\Gits\Br26\Br26\Br26.ino"
+#include "D:\Gits\Br26\Br26\ArdBir1.h"
+#include "D:\Gits\Br26\Br26\DS1307_Wire.h"
+#include "D:\Gits\Br26\Br26\Functions.h"
+#include "D:\Gits\Br26\Br26\LCD20x4_RUS.h"
+#include "D:\Gits\Br26\Br26\Pcb_Uniholic.h"
+#include "D:\Gits\Br26\Br26\Presentazione.h"
+#include "D:\Gits\Br26\Br26\WiFi_CC3000.h"
 #endif

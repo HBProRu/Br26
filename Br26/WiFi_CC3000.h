@@ -6,10 +6,10 @@ Adafruit_CC3000 cc3000 = Adafruit_CC3000(SPI_CLOCK_DIV2);//ADAFRUIT_CC3000_CS, A
 uint32_t ip;
 int port = 80;
 // WiFi network (change with your settings !)
-//#define WLAN_SSID       "ABCD"        // cannot be longer than 32 characters!
-//#define WLAN_PASS       "0987654321"
-#define WLAN_SSID       "MyInet"        // cannot be longer than 32 characters!
-#define WLAN_PASS       "Inet724I"
+#define WLAN_SSID       "ABCD"        // cannot be longer than 32 characters!
+#define WLAN_PASS       "0987654321"
+//#define WLAN_SSID       "MyInet"        // cannot be longer than 32 characters!
+//#define WLAN_PASS       "Inet724I"
 
 #define WLAN_SECURITY   WLAN_SEC_WPA2 // This can be WLAN_SEC_UNSEC, WLAN_SEC_WEP, WLAN_SEC_WPA or WLAN_SEC_WPA2
 #define WEBSITE         "dvc.hbpro.ru"
