@@ -685,15 +685,50 @@ void Menu_4_1(){
 }
 */
 void GeneralSet(int generalSet, byte i){
-  lcd.setCursor(14,2);
- //if(i<2)LCDSpace(1);
+	int generalSet_p;
+
+	switch (i)
+	{
+	case(0) :
+
+		lcd.setCursor(13, 2);
+		generalSet_p = generalSet * 100 / 255;
+		if (generalSet_p<10 && generalSet_p >= 0)LCDSpace(3);
+		if (generalSet_p >= 10 && generalSet_p<100)LCDSpace(2);
+		if (generalSet_p >= 100)LCDSpace(1);
+		lcd.print(generalSet_p);
+		lcd.print(F("%"));
+		break;
+
+	//case (1):
+
+	//	lcd.setCursor(13, 2);
+	//	generalSet_p = 100 - generalSet * 100 / 255;
+	//	if (generalSet_p<10 && generalSet_p >= 0)LCDSpace(3);
+	//	if (generalSet_p >= 10 && generalSet_p<100)LCDSpace(2);
+	//	if (generalSet_p >= 100)LCDSpace(1);
+	//	lcd.print(generalSet_p);
+	//	lcd.print(F("%"));
+	//	break;
+
+	default:
+		lcd.setCursor(14, 2);
+		if (generalSet<10 && generalSet >= 0)LCDSpace(3);
+		if (generalSet >= 10 && generalSet<100)LCDSpace(2);
+		if (generalSet >= 100)LCDSpace(1);
+		lcd.print(generalSet);
+		break;
+	}
+
+	//lcd.setCursor(14,2);
+ ////if(i<2)LCDSpace(1);
 
 
-   // if (generalSet<=-10 && generalSet>-100)LCDSpace(1);
-    //if (generalSet<0 && generalSet>-10)LCDSpace(2);
-    if (generalSet<10 && generalSet>=0)LCDSpace(3);
-    if (generalSet>=10 && generalSet<100)LCDSpace(2);
-    if (generalSet>=100)LCDSpace(1);
+ //  // if (generalSet<=-10 && generalSet>-100)LCDSpace(1);
+ //   //if (generalSet<0 && generalSet>-10)LCDSpace(2);
+ //   if (generalSet<10 && generalSet>=0)LCDSpace(3);
+ //   if (generalSet>=10 && generalSet<100)LCDSpace(2);
+ //   if (generalSet>=100)LCDSpace(1);
 
 /*   if(i==5){
     float OffSet=generalSet/10.0;
@@ -702,9 +737,10 @@ void GeneralSet(int generalSet, byte i){
     return;
   } */
 
-  lcd.print(generalSet);
+  //lcd.print(generalSet);
 
   //if(i==4)lcd.print(F("%"));
+  
 }
 
 

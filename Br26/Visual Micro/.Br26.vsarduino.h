@@ -12,6 +12,7 @@
 #define _VSARDUINO_H_
 #define __AVR_ATmega1284p__
 #define __AVR_ATmega1284P__
+#define _VMDEBUG 1
 #define ARDUINO 158
 #define ARDUINO_MAIN
 #define __AVR__
@@ -38,14 +39,58 @@
             
 typedef unsigned char byte;
 extern "C" void __cxa_pure_virtual() {;}
-#include "c:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\arduino.h"
-#include "c:\Program Files (x86)\Arduino\hardware\arduino\avr\variants\uniholicv15\pins_arduino.h" 
-#include "D:\Gits\Br26\Br26\Br26.ino"
-#include "D:\Gits\Br26\Br26\ArdBir1.h"
-#include "D:\Gits\Br26\Br26\DS1307_Wire.h"
-#include "D:\Gits\Br26\Br26\Functions.h"
-#include "D:\Gits\Br26\Br26\LCD20x4_RUS.h"
-#include "D:\Gits\Br26\Br26\Pcb_Uniholic.h"
-#include "D:\Gits\Br26\Br26\Presentazione.h"
-#include "D:\Gits\Br26\Br26\WiFi_CC3000.h"
+
+void Gradi();
+void pauseStage();
+void dsInizializza();
+void Temperature();
+void PID_HEAT(boolean autoMode);
+void load_pid_settings();
+boolean wait_for_confirm(boolean& test, byte Stato, byte Tipo, byte Display);
+void quit_mode(boolean& processLoop);
+void allOFF();
+void heat_on();
+void heat_off(boolean mheat);
+void heat_control();
+void pump_on();
+void pump_off(boolean mpump);
+void pump_prime();
+void pump_control();
+void pump_rest(byte stage);
+void start_time();
+void Timing(byte stage, boolean Test, byte Type);
+void hop_add();
+void stage_loop();
+void add_malt();
+void Iodine_Test();
+void remove_malt();
+void manual_mode();
+void WaitStart();
+void Temperatura_Raggiunta();
+void auto_mode();
+void set_PID();
+void set_Unit();
+void set_Stages();
+void set_General();
+byte Congruita(byte& numRicetta, byte Verso);
+void loadRecipe();
+void saveRecipe();
+void deleteRecipe();
+void initializeRecipe();
+void RecipeMenu();
+void set_hops();
+void setup_mode();
+//
+//
+
+#include "C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\arduino.h"
+#include "C:\Program Files (x86)\Arduino\hardware\arduino\avr\variants\uniholicv15\pins_arduino.h" 
+#include "d:\Gits\Br26\Br26\Br26.ino"
+#include "d:\Gits\Br26\Br26\ArdBir1.h"
+#include "d:\Gits\Br26\Br26\DS1307_Wire.h"
+#include "d:\Gits\Br26\Br26\Functions.h"
+#include "d:\Gits\Br26\Br26\LCD20x4_RUS.h"
+#include "d:\Gits\Br26\Br26\Pcb_Uniholic.h"
+#include "d:\Gits\Br26\Br26\Presentazione.h"
+#include "d:\Gits\Br26\Br26\WiFi_CC3000.h"
 #endif

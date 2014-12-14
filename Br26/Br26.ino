@@ -187,7 +187,7 @@ float p_F[] = { 167.00, 68.00, 0.25, 131.00, 77.00, 0.25, 122.00, 95.00, 0.25, 1
 
 int   p_PID[] = { 100, -100, 1, 400, -200, 1, 100, -100, 1, 7500, 1000, 250, 100, 0, 1, 50, -50, 1 };
 byte  p_Unit[] = { 1, 0, 1, 1, 0, 1, 105, 90, 1, 221, 194, 1, 15, 5, 1, 5, 0, 1, 1, 0, 1, 0, 0, 0 };
-int  p_General[] = { 255, 0, 1, 255, 0, 1 };
+int  p_General[] = { 255, 0, 2, 1, 255, 0, 2, 0 };
 
 //Specify the links and initial tuning parameters
 //PID myPID(&Input, &Output, &Setpoint, 95, 10, 0, DIRECT);
@@ -1545,7 +1545,7 @@ void set_General(){
 			Menu_3_5_x(i);
 			LeggiPulsante(Verso, Timer);
 			GeneralSet(generalSet, i);
-			Set(generalSet, p_General[a], p_General[a + 1], p_General[a + 2], Timer, Verso);
+			Set2(generalSet, p_General[a], p_General[a + 1], p_General[a + 2], Timer, Verso, p_General[a + 3]);
 			quit_mode(generalLoop);
 			//if(i==0)analogWrite(6,bright);
 			//if(i==1)analogWrite(7,contrast);
@@ -1554,7 +1554,7 @@ void set_General(){
 
 			if (i == 0)analogWrite(6, generalSet);
 			if (i == 1)analogWrite(7, generalSet);
-			//if(contrast==0||contrast==255)contrast=40;
+			//if(contrast==0||contrast==255)contrast=0;
 			//analogWrite(7,contrast);
 
 			if (btn_Press(Button_enter, 50)){
@@ -1563,7 +1563,7 @@ void set_General(){
 			}
 		}
 		setAddr += 1;
-		a += 3;
+		a += 4;
 	}Clear_2_3();
 }
 
@@ -2039,7 +2039,8 @@ void setup(){
 
 	//  Sprite screen
 	analogWrite(6, bright);
-	if (contrast == 0 || contrast == 255)contrast = 40;
+	if (contrast == 0 || contrast > 50)contrast = 0;
+
 	analogWrite(7, contrast);
 	//ArdBir();
 
@@ -2137,9 +2138,9 @@ void loop(){
 			//      Temperature_WiFi();
 			lastTemp = Temp_Now;
 		};
-		//    getDateDs(p_DT);
+		getDateDs(p_DT);
 		PrintDT(p_DT);
-		//    loope();
+		//loope();
 
 		//   if (!cc3000.begin())
 		//  {
