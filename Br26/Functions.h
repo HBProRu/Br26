@@ -260,73 +260,17 @@ int Set(int& Set, int Up, int Low, int Step, long Timer, byte Verso){
 		}
 		if (Verso == 1){
 			if (Set + step_size>Up)Set = Up;
+			else if (Set + step_size<Low)Set = Low;
 			else Set += step_size;
 		}
 		else if (Verso == 2){
 			if (Set - step_size<Low)Set = Low;
+			else if (Set - step_size>Up)Set = Up;
 			else Set -= step_size;
 		}
 	}
 }
 
-byte Set2(byte& Set, byte Up, byte Low, byte Step, long Timer, byte Verso, int direc){
-	int step_size;
-	int ControllaPulsante;
-
-	if (Set>Up)Set = Up;
-	if (Set<Low)Set = Low;
-
-	delay(35);
-	if (direc == 1) {
-		if (Verso == 1){
-			ControllaPulsante = digitalRead(Button_up);
-		}
-		if (Verso == 2){
-			ControllaPulsante = digitalRead(Button_dn);
-		}
-	}
-	else
-	{
-		if (Verso == 1){
-			ControllaPulsante = digitalRead(Button_dn);
-		}
-		if (Verso == 2){
-			ControllaPulsante = digitalRead(Button_up);
-		}
-	}
-
-	if (ControllaPulsante == 0 && Verso != 0){
-		if (((millis() - Timer) / 1000) >= 4)step_size = (Step * 10);
-		else{
-			if (((millis() - Timer) / 1000) >= 2)step_size = (Step * 5);
-			else step_size = Step;
-		}
-		if (direc == 1) {
-			if (Verso == 1){
-				if (Set + step_size > Up)Set = Up;
-				else Set += step_size;
-			}
-			else if (Verso == 2){
-				if (Set - step_size < Low)Set = Low;
-				else Set -= step_size;
-			}
-		}
-		else
-		{
-			if (Verso == 1){
-				if (Set - step_size < Low)Set = Low;
-				else Set -= step_size;
-			}
-			else if (Verso == 2){
-				if (Set + step_size > Up)Set = Up;
-				else Set += step_size;
-
-			}
-			
-			
-		}
-	}
-}
 
 float Set(float& Set, float Up, float Low, float Step, long Timer, byte Verso){
 	float step_size;
@@ -344,23 +288,25 @@ float Set(float& Set, float Up, float Low, float Step, long Timer, byte Verso){
 	}
 
 	if (ControllaPulsante == 0 && Verso != 0){
-		if (((millis() - Timer) / 1000) >= 4)step_size = (Step*20.0);
+		if (((millis() - Timer) / 1000) >= 4)step_size = (Step * 10);
 		else{
-			if (((millis() - Timer) / 1000) >= 2)step_size = (Step*4.0);
+			if (((millis() - Timer) / 1000) >= 2)step_size = (Step * 5);
 			else step_size = Step;
 		}
 		if (Verso == 1){
 			if (Set + step_size>Up)Set = Up;
+			else if (Set + step_size<Low)Set = Low;
 			else Set += step_size;
 		}
 		else if (Verso == 2){
 			if (Set - step_size<Low)Set = Low;
+			else if (Set - step_size>Up)Set = Up;
 			else Set -= step_size;
 		}
 	}
 }
 
-byte Set(byte& Set, byte Up, byte Low, byte Step, long Timer, byte Verso){
+byte Set(byte& Set, byte Up, byte Low, int Step, long Timer, byte Verso){
 	int step_size;
 	int ControllaPulsante;
 
@@ -383,10 +329,12 @@ byte Set(byte& Set, byte Up, byte Low, byte Step, long Timer, byte Verso){
 		}
 		if (Verso == 1){
 			if (Set + step_size>Up)Set = Up;
+			else if (Set + step_size<Low)Set = Low;
 			else Set += step_size;
 		}
 		else if (Verso == 2){
 			if (Set - step_size<Low)Set = Low;
+			else if (Set - step_size>Up)Set = Up;
 			else Set -= step_size;
 		}
 	}

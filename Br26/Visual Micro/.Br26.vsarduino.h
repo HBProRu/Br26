@@ -12,7 +12,6 @@
 #define _VSARDUINO_H_
 #define __AVR_ATmega1284p__
 #define __AVR_ATmega1284P__
-#define _VMDEBUG 1
 #define ARDUINO 158
 #define ARDUINO_MAIN
 #define __AVR__

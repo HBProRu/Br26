@@ -700,16 +700,16 @@ void GeneralSet(int generalSet, byte i){
 		lcd.print(F("%"));
 		break;
 
-	//case (1):
+	case (1):
 
-	//	lcd.setCursor(13, 2);
-	//	generalSet_p = 100 - generalSet * 100 / 255;
-	//	if (generalSet_p<10 && generalSet_p >= 0)LCDSpace(3);
-	//	if (generalSet_p >= 10 && generalSet_p<100)LCDSpace(2);
-	//	if (generalSet_p >= 100)LCDSpace(1);
-	//	lcd.print(generalSet_p);
-	//	lcd.print(F("%"));
-	//	break;
+		lcd.setCursor(13, 2);
+		generalSet_p = 100 - generalSet * 100 / 50;
+		if (generalSet_p<10 && generalSet_p >= 0)LCDSpace(3);
+		if (generalSet_p >= 10 && generalSet_p<100)LCDSpace(2);
+		if (generalSet_p >= 100)LCDSpace(1);
+		lcd.print(generalSet_p);
+		lcd.print(F("%"));
+		break;
 
 	default:
 		lcd.setCursor(14, 2);

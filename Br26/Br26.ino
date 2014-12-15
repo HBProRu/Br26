@@ -187,7 +187,7 @@ float p_F[] = { 167.00, 68.00, 0.25, 131.00, 77.00, 0.25, 122.00, 95.00, 0.25, 1
 
 int   p_PID[] = { 100, -100, 1, 400, -200, 1, 100, -100, 1, 7500, 1000, 250, 100, 0, 1, 50, -50, 1 };
 byte  p_Unit[] = { 1, 0, 1, 1, 0, 1, 105, 90, 1, 221, 194, 1, 15, 5, 1, 5, 0, 1, 1, 0, 1, 0, 0, 0 };
-int  p_General[] = { 255, 0, 2, 1, 255, 0, 2, 0 };
+int  p_General[] = { 255, 0, 2, 50, 0, -1 };
 
 //Specify the links and initial tuning parameters
 //PID myPID(&Input, &Output, &Setpoint, 95, 10, 0, DIRECT);
@@ -1545,7 +1545,7 @@ void set_General(){
 			Menu_3_5_x(i);
 			LeggiPulsante(Verso, Timer);
 			GeneralSet(generalSet, i);
-			Set2(generalSet, p_General[a], p_General[a + 1], p_General[a + 2], Timer, Verso, p_General[a + 3]);
+			Set(generalSet, p_General[a], p_General[a + 1], p_General[a + 2], Timer, Verso);
 			quit_mode(generalLoop);
 			//if(i==0)analogWrite(6,bright);
 			//if(i==1)analogWrite(7,contrast);
@@ -1563,7 +1563,7 @@ void set_General(){
 			}
 		}
 		setAddr += 1;
-		a += 4;
+		a += 3;
 	}Clear_2_3();
 }
 
