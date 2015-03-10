@@ -12,84 +12,79 @@
 #define _VSARDUINO_H_
 #define __AVR_ATmega1284p__
 #define __AVR_ATmega1284P__
-#define ARDUINO 158
+#define ARDUINO 161
 #define ARDUINO_MAIN
 #define __AVR__
 #define __avr__
 #define F_CPU 16000000L
 #define __cplusplus
+#define GCC_VERSION 40801
+#define ARDUINO_ARCH_AVR
+#define ARDUINO_AVR_UNIHOLIC
 #define __inline__
 #define __asm__(x)
 #define __extension__
-#define __ATTR_PURE__
-#define __ATTR_CONST__
+//#define __ATTR_PURE__
+//#define __ATTR_CONST__
 #define __inline__
-#define __asm__ 
+//#define __asm__ 
 #define __volatile__
+#define GCC_VERSION 40801
+#define volatile(va_arg) 
 
-#define __builtin_va_list
+typedef void *__builtin_va_list;
 #define __builtin_va_start
 #define __builtin_va_end
-#define __DOXYGEN__
+//#define __DOXYGEN__
 #define __attribute__(x)
 #define NOINLINE __attribute__((noinline))
 #define prog_void
 #define PGM_VOID_P int
-            
+#define NEW_H
+/*
+#ifndef __ATTR_CONST__
+#define __ATTR_CONST__ __attribute__((__const__))
+#endif
+
+#ifndef __ATTR_MALLOC__
+#define __ATTR_MALLOC__ __attribute__((__malloc__))
+#endif
+
+#ifndef __ATTR_NORETURN__
+#define __ATTR_NORETURN__ __attribute__((__noreturn__))
+#endif
+
+#ifndef __ATTR_PURE__
+#define __ATTR_PURE__ __attribute__((__pure__))
+#endif            
+*/
 typedef unsigned char byte;
 extern "C" void __cxa_pure_virtual() {;}
 
-void Gradi();
-void pauseStage();
-void dsInizializza();
-void Temperature();
-void PID_HEAT(boolean autoMode);
-void load_pid_settings();
-boolean wait_for_confirm(boolean& test, byte Stato, byte Tipo, byte Display);
-void quit_mode(boolean& processLoop);
-void allOFF();
-void heat_on();
-void heat_off(boolean mheat);
-void heat_control();
-void pump_on();
-void pump_off(boolean mpump);
-void pump_prime();
-void pump_control();
-void pump_rest(byte stage);
-void start_time();
-void Timing(byte stage, boolean Test, byte Type);
-void hop_add();
-void stage_loop();
-void add_malt();
-void Iodine_Test();
-void remove_malt();
-void manual_mode();
-void WaitStart();
-void Temperatura_Raggiunta();
-void auto_mode();
-void set_PID();
-void set_Unit();
-void set_Stages();
-void set_General();
-byte Congruita(byte& numRicetta, byte Verso);
-void loadRecipe();
-void saveRecipe();
-void deleteRecipe();
-void initializeRecipe();
-void RecipeMenu();
-void set_hops();
-void setup_mode();
-//
-//
 
-#include "C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\arduino.h"
-#include "C:\Program Files (x86)\Arduino\hardware\arduino\avr\variants\uniholicv15\pins_arduino.h" 
-#include "d:\Gits\Br26\Br26\Br26.ino"
-#include "d:\Gits\Br26\Br26\ArdBir1.h"
-#include "d:\Gits\Br26\Br26\DS1307_Wire.h"
-#include "d:\Gits\Br26\Br26\Functions.h"
-#include "d:\Gits\Br26\Br26\LCD20x4_RUS.h"
-#include "d:\Gits\Br26\Br26\Pcb_Uniholic.h"
-#include "d:\Gits\Br26\Br26\Presentazione.h"
-#include "d:\Gits\Br26\Br26\WiFi_CC3000.h"
+
+#include <arduino.h>
+#include <pins_arduino.h> 
+#undef F
+#define F(string_literal) ((const PROGMEM char *)(string_literal))
+#undef cli
+#define cli()
+#define pgm_read_byte(address_short)
+#define pgm_read_word(address_short)
+#define pgm_read_word2(address_short)
+#define digitalPinToPort(P)
+#define digitalPinToBitMask(P) 
+#define digitalPinToTimer(P)
+#define analogInPinToBit(P)
+#define portOutputRegister(P)
+#define portInputRegister(P)
+#define portModeRegister(P)
+#include <Br26.ino>
+#include <ArdBir1.h>
+#include <DS1307_Wire.h>
+#include <Functions.h>
+#include <LCD20x4_RUS.h>
+#include <Pcb_Uniholic.h>
+#include <Presentazione.h>
+#include <WiFi_CC3000.h>
 #endif
