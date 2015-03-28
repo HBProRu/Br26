@@ -30,17 +30,11 @@ void PrintTemp(float Temp){
   lcd.write((byte)0);
 }
 
-void PrintDT(byte pdata[3]){
-    lcd.setCursor(6,1);
-    if (String(pdata[2], DEC).length() == 1)lcd.print("0");
-    lcd.print(pdata[2], DEC);
-    lcd.print(":");
-    if (String(pdata[1], DEC).length() == 1)lcd.print("0");
-    lcd.print(pdata[1], DEC);
-    lcd.print(":");
-    if (String(pdata[0], DEC).length() == 1)lcd.print("0");
-    lcd.print(pdata[0], DEC);
-    lcd.print("  ");
+void PrintTime(String time){
+	//LCDClear(1);
+	lcd.setCursor(6,1);
+	lcd.print(time);
+    
 }
 
 void Clear_2_3(){

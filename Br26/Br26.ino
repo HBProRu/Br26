@@ -1,7 +1,7 @@
 ﻿
 
 
-#define DEBUG	false
+#define DEBUG	true
 #define WIFI	false
 
 //libraries
@@ -131,6 +131,9 @@ byte p_DT[3];
 
 Uniholic uniholic;
 
+//Модуль часов реального времени
+RTC_DS1307 RTC;
+DateTime dt;
 
 // ****************************************
 // ******** start of  the funtions ********
@@ -1952,7 +1955,17 @@ void setup_mode(){
 void setup(){
 	uniholic.begin();
 	// Start up the library
-	Serial.begin(9600);
+	#if DEBUG == true
+		Serial.begin(115200);	
+	#endif
+
+	Wire.begin();
+	RTC.begin();
+	if (!RTC.isrunning()) {
+		Serial.println("RTC is NOT running!");
+		// following line sets the RTC to the date & time this sketch was compiled
+		RTC.adjust(DateTime(__DATE__, __TIME__));
+	}
 
 	// SETTING LCD*****
 	lcd.begin(20, 4);
@@ -2005,7 +2018,7 @@ void setup(){
 
 	// cc3000_init();
 
-	setupe();
+	//setupe();
 	// UpdateNTPTime();
 	// setDateDs1307(String(timeExtract.sec).toInt(),        // 0-59
 	//                   String(timeExtract.min).toInt(),        // 0-59
@@ -2023,6 +2036,43 @@ void setup(){
 	//	uint16_t year;   ///< Year.
 	//	uint8_t	 wday;	 ///< Days since Sunday (0..6)
 	//	uint8_t	 yday;   ///< Days since January 1 (0..365)
+}
+
+String getTimeNowStr() {
+	dt = RTC.now();
+	String timeNow = "";
+	//if (String(dt.hour(), DEC).length() == 1)timeNow += "0";
+	timeNow += dateElementStr(String(dt.hour(), DEC));
+	timeNow += ":";
+	//if (String(dt.minute(), DEC).length() == 1)timeNow += "0";
+	timeNow += dateElementStr(String(dt.minute(), DEC));
+	timeNow += ":";
+	//if (String(dt.second(), DEC).length() == 1)timeNow += "0";
+	timeNow += dateElementStr(String(dt.second(), DEC));
+	return timeNow;
+}
+
+String getDateTimeNowStr() {
+	dt = RTC.now();
+	String dtStr = "";
+	dtStr += String(dt.year(), DEC);
+	dtStr += ":";
+	dtStr += dateElementStr(String(dt.month(), DEC));
+	dtStr += ":";
+	dtStr += dateElementStr(String(dt.day(), DEC));
+	dtStr += " ";
+	dtStr += getTimeNowStr();
+	return dtStr;
+}
+
+String dateElementStr(String str) {
+	if (str.length() == 1) {
+		return "0" + str;
+	}
+	else
+	{
+		return str;
+	}
 }
 
 void loop(){
@@ -2086,8 +2136,24 @@ void loop(){
 			//      Temperature_WiFi();
 			lastTemp = Temp_Now;
 		};
-		getDateDs(p_DT);
-		PrintDT(p_DT);
+		//getDateDs(p_DT);
+		#if DEBUG == true
+		dt = RTC.now();
+		Serial.print(dt.year(), DEC);
+		Serial.print('/');
+		Serial.print(dt.month(), DEC);
+		Serial.print('/');
+		Serial.print(dt.day(), DEC);
+		Serial.print(' ');
+		Serial.print(dt.hour(), DEC);
+		Serial.print(':');
+		Serial.print(dt.minute(), DEC);
+		Serial.print(':');
+		Serial.print(dt.second(), DEC);
+		Serial.println();
+		#endif
+		PrintTime(getTimeNowStr());
+		
 		//loope();
 
 		//   if (!cc3000.begin())
