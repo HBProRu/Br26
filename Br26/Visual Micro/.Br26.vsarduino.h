@@ -84,6 +84,8 @@ extern "C" void __cxa_pure_virtual() {;}
 #include <DS1307_Wire.h>
 #include <Functions.h>
 #include <LCD20x4_RUS.h>
+#include <LiquidCrystalRus.cpp>
+#include <LiquidCrystalRus.h>
 #include <Pcb_Uniholic.h>
 #include <Presentazione.h>
 #include <WiFi_CC3000.h>
