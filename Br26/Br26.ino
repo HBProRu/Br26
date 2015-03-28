@@ -1,8 +1,11 @@
+ï»¿
 
+#define DEBUG	false
+#define WIFI	false
 
 //libraries
 #include <EEPROM.h>
-#include <LiquidCrystalRus.h>
+#include "LiquidCrystalRus.h"
 #include <OneWire.h>
 #include <PID_v1.h>
 //#include <SD.h>
@@ -17,10 +20,11 @@
 #include "DHT.h"
 #include <stdlib.h>
 #include <Uniholic.h>
-//#include <floatToString.h>
 #include "DS1307_Wire.h"
-#include "WiFi_CC3000.h"
 
+#if WIFI == true
+#include "WiFi_CC3000.h"
+#endif
 // SETTING PCB*****
 // Select your PCB Version
 
@@ -72,8 +76,8 @@ boolean IodineTest = false;
 //boolean IodineTest2  = false;
 boolean DelayedMode = false;
 boolean DebugMode = false;
-//True - âûâîäèòü ñîîáùåíèÿ â êîíñîëü
-//False - íå âûâîäèòü îòëàäî÷íûå ñîîáùåíèÿ
+//True - Ð²Ñ‹Ð²Ð¾Ð´Ð¸Ñ‚ÑŒ ÑÐ¾Ð¾Ð±Ñ‰ÐµÐ½Ð¸Ñ Ð² ÐºÐ¾Ð½ÑÐ¾Ð»ÑŒ
+//False - Ð½Ðµ Ð²Ñ‹Ð²Ð¾Ð´Ð¸Ñ‚ÑŒ Ð¾Ñ‚Ð»Ð°Ð´Ð¾Ñ‡Ð½Ñ‹Ðµ ÑÐ¾Ð¾Ð±Ñ‰ÐµÐ½Ð¸Ñ
 
 
 float mset_temp;
@@ -285,7 +289,7 @@ void PID_HEAT(boolean autoMode){
 
 	// PWM the output
 	unsigned long now = millis();
-	if (now - w_StartTime>WindowSize)w_StartTime += WindowSize; //time to shift the Relay Window
+	if (now - w_StartTime > WindowSize)w_StartTime += WindowSize; //time to shift the Relay Window
 	if ((Output*(WindowSize / 100)) > now - w_StartTime)heat_on();
 	else heat_off(mheat);
 }
@@ -422,7 +426,7 @@ void pump_off(boolean mpump){
 void pump_prime(){
 	PumpPrime();
 
-	for (byte i = 1; i<6; i++){
+	for (byte i = 1; i < 6; i++){
 		pump_on();
 		delay(750 + i * 250);
 		pump_off(mpump);
@@ -567,7 +571,7 @@ void Timing(byte stage, boolean Test, byte Type){
 	//Type==2 IODINE TEST
 	//Type==3 START DELAYED
 
-	if ((millis() - start)>1000){  // timing routine
+	if ((millis() - start) > 1000){  // timing routine
 		start = millis();
 		second++;
 
@@ -583,7 +587,7 @@ void Timing(byte stage, boolean Test, byte Type){
 			//if(IodineTest2)second=0;// starts counting down when temp reached
 		}
 
-		if (second>59){
+		if (second > 59){
 			second = 0;
 			if (stage == 0)pumpTime = 0;
 			else pumpTime++;
@@ -603,7 +607,7 @@ void hop_add(){
 			HopAdd(hopAdd);
 			CntDwn(TimeLeft);
 
-			if (TimeLeft<6)Buzzer(1, 150);
+			if (TimeLeft < 6)Buzzer(1, 150);
 
 			delay(2500);
 			Buzzer(1, 750);
@@ -625,7 +629,7 @@ void stage_loop(){
 
 	boolean tempBoilReached = false;
 
-	while ((stageTime>0) && (b_Enter)){
+	while ((stageTime > 0) && (b_Enter)){
 		lastminute = stageTime;
 
 		Timing((x - 1), tempReached, 0);
@@ -704,7 +708,7 @@ void stage_loop(){
 		pump_rest((x - 1));
 		if ((x - 1) == 8){
 			//check for minute tick
-			if (stageTime<lastminute)hop_add();  //check to add hops
+			if (stageTime < lastminute)hop_add();  //check to add hops
 		}
 		quit_mode(b_Enter);
 
@@ -931,7 +935,7 @@ void WaitStart(){
 
 		start_time();
 
-		while (stageTime>0){
+		while (stageTime > 0){
 			StartDelay(TimeLeft);
 			Timing(0, true, 1);
 
@@ -1110,7 +1114,7 @@ void set_PID(){
 
 	for (byte i = 0; i < 6; i++){
 
-		if (i<4 || i == 5)read_set(pidSet, setAddr);
+		if (i < 4 || i == 5)read_set(pidSet, setAddr);
 		else r_set(boil_output, setAddr);
 		pidLoop = true;
 
@@ -1126,7 +1130,7 @@ void set_PID(){
 			else{
 				PidSet(pidSet, i);
 
-				if (i<3)Set(pidSet, p_PID[a], p_PID[a + 1], p_PID[a + 2], Timer, Verso);
+				if (i < 3)Set(pidSet, p_PID[a], p_PID[a + 1], p_PID[a + 2], Timer, Verso);
 				else   Set(pidSet, p_PID[a], p_PID[a + 1], p_PID[a + 2], Timer, Verso);
 			}
 			quit_mode(pidLoop);
@@ -1138,7 +1142,7 @@ void set_PID(){
 				pidLoop = false;
 			}
 		}
-		if (i<4 || i == 5)setAddr += 2;
+		if (i < 4 || i == 5)setAddr += 2;
 		else setAddr += 1;
 		a += 3;
 	}Clear_2_3();
@@ -1156,7 +1160,7 @@ void set_Unit(){
 
 	byte setAddr = 15;
 
-	for (byte i = 0; i<8; i++){
+	for (byte i = 0; i < 8; i++){
 		if ((i == 2 && ScaleTemp == 1) || (i == 3 && ScaleTemp == 0))unitLoop = false;
 		else unitLoop = true;
 
@@ -1192,7 +1196,7 @@ void set_Unit(){
 			if (!unitLoop)i = 8;
 
 			if (btn_Press(Button_enter, 50)){
-				if (i<2 || i>3){
+				if (i < 2 || i>3){
 					save_set(setAddr, lowByte(unitSet));
 
 					if (i == 0){
@@ -1220,11 +1224,11 @@ void set_Unit(){
 					}
 
 					if (i == 7){
-						if (ScaleTemp == 0){// °C
+						if (ScaleTemp == 0){// Â°C
 							save_set(22, lowByte(unitSet));
 							save_set(23, lowByte((int)((unitSet*1.8) + 32)));
 						}
-						else{// °F
+						else{// Â°F
 							save_set(22, lowByte((int)((unitSet - 32) / 1.8)));
 							save_set(23, lowByte(unitSet));
 						}
@@ -1274,7 +1278,7 @@ void set_Stages(){
 
 	StageAddr = 30;
 
-	for (byte i = 0; i<8; i++){ // loops for the number of stages
+	for (byte i = 0; i < 8; i++){ // loops for the number of stages
 		TempTimeLoop = true;
 		autoLoop = true;
 
@@ -1292,7 +1296,7 @@ void set_Stages(){
 		else{
 			read_set(stagetempSet, StageAddr + 2);
 
-			if (i>0)read_set(temp_stageTemp, StageAddr - 3);
+			if (i > 0)read_set(temp_stageTemp, StageAddr - 3);
 			temp_stageTemp = temp_stageTemp / 16.0;
 			Max = p_F[a];
 			Min = p_F[a + 1];
@@ -1303,27 +1307,27 @@ void set_Stages(){
 
 		stagetempSet = stagetempSet / 16.0;
 
-		if (i>0){
-			if (Max<temp_stageTemp - DeltaTemp){//La temepratura precedente e' sopra i limiti dello stage
+		if (i > 0){
+			if (Max < temp_stageTemp - DeltaTemp){//La temepratura precedente e' sopra i limiti dello stage
 				//Salta lo Stage
 				if (i != 6 && i != 7){
 					stagetempSet = temp_stageTemp * 16;
 					w_stagetempSet = word(stagetempSet);
 
 					if (ScaleTemp == 0){
-						// Salva il settaggio in °C
+						// Salva il settaggio in Â°C
 						save_set(StageAddr, w_stagetempSet);
 
-						// Salva il settaggio in °F
+						// Salva il settaggio in Â°F
 						ConvertiCtoF(stagetempSet);
 						w_stagetempSet = word(stagetempSet);
 						save_set(StageAddr + 2, w_stagetempSet);
 					}
 					else{
-						// Salva il settaggio in °F
+						// Salva il settaggio in Â°F
 						save_set(StageAddr + 2, w_stagetempSet);
 
-						// Salva il settaggio in °C
+						// Salva il settaggio in Â°C
 						ConvertiFtoC(stagetempSet);
 						w_stagetempSet = word(stagetempSet);
 						save_set(StageAddr, w_stagetempSet);
@@ -1340,7 +1344,7 @@ void set_Stages(){
 					if (MashInTemp - DeltaTemp >= Min)Min = MashInTemp - DeltaTemp;
 				}
 				else{
-					if (Min<temp_stageTemp)Min = temp_stageTemp;
+					if (Min < temp_stageTemp)Min = temp_stageTemp;
 				}
 			}
 		}
@@ -1359,7 +1363,7 @@ void set_Stages(){
 				if (ScaleTemp == 0)stagetempSet = p_C[a + 1];
 				else stagetempSet = p_F[a + 1];
 
-				if (Min>stagetempSet)stagetempSet = Min;
+				if (Min > stagetempSet)stagetempSet = Min;
 
 				FlagStart = true;
 			}
@@ -1378,20 +1382,20 @@ void set_Stages(){
 				w_stagetempSet = word(stagetempSet);
 
 				if (ScaleTemp == 0){
-					// Salva il settaggio in °C
+					// Salva il settaggio in Â°C
 					save_set(StageAddr, w_stagetempSet);
 
-					// Salva il settaggio in °F
+					// Salva il settaggio in Â°F
 					ConvertiCtoF(stagetempSet);
 
 					w_stagetempSet = word(stagetempSet);
 					save_set(StageAddr + 2, w_stagetempSet);
 				}
 				else{
-					// Salva il settaggio in °F
+					// Salva il settaggio in Â°F
 					save_set(StageAddr + 2, w_stagetempSet);
 
-					// Salva il settaggio in °C
+					// Salva il settaggio in Â°C
 					ConvertiFtoC(stagetempSet);
 					w_stagetempSet = word(stagetempSet);
 					save_set(StageAddr, w_stagetempSet);
@@ -1500,11 +1504,11 @@ byte Congruita(byte& numRicetta, byte Verso){
 
 		while (Controllo){
 			//if(Verso==1)if(numControllo<10)numControllo++;
-			if (Verso == 1)if (numRicetta<10)numRicetta++;
+			if (Verso == 1)if (numRicetta < 10)numRicetta++;
 			else Controllo = false;
 
 			//if(Verso==2)if(numControllo>1)numControllo--;
-			if (Verso == 2)if (numRicetta>1)numRicetta--;
+			if (Verso == 2)if (numRicetta > 1)numRicetta--;
 			else Controllo = false;
 
 			//if (EEPROM.read(89+numControllo)==1){
@@ -1527,7 +1531,7 @@ void loadRecipe(){
 	RicettaUp = 0;
 	RicettaDwn = 0;
 
-	for (byte i = 90; i<100; i++){//Assegna il limite di ricette registrate
+	for (byte i = 90; i < 100; i++){//Assegna il limite di ricette registrate
 		if (EEPROM.read(i) == 1){
 			RicettaUp = (i - 89);
 			if (RicettaDwn == 0)RicettaDwn = RicettaUp;
@@ -1541,7 +1545,7 @@ void loadRecipe(){
 	byte NomeRicetta[10];
 	byte pos = 0;
 
-	for (byte i = RicettaDwn + 89; i<RicettaUp + 89 + 1; i++){//Trova la prima ricetta libera
+	for (byte i = RicettaDwn + 89; i < RicettaUp + 89 + 1; i++){//Trova la prima ricetta libera
 		numRicetta = i - 89;
 
 		while (ricettaLoop){
@@ -1549,7 +1553,7 @@ void loadRecipe(){
 			LeggiPulsante(Verso, Timer);
 			Set(numRicetta, RicettaUp, RicettaDwn, 1, Timer, Verso);
 
-			for (pos = 0; pos<10; pos++){
+			for (pos = 0; pos < 10; pos++){
 				LCD_NomeRicetta(pos, EEPROM.read(620 + pos + ((numRicetta - 1) * 10)));
 			}
 
@@ -1569,7 +1573,7 @@ void loadRecipe(){
 
 				//Parametri Ricetta
 				Da = 100 + ((numRicetta - 1) * 52);
-				for (int j = 30; j<82; j++){
+				for (int j = 30; j < 82; j++){
 					save_set(j, (byte)EEPROM.read(Da));
 					//delay(75);
 					Da++;
@@ -1585,7 +1589,7 @@ void saveRecipe(){
 	boolean saverecipeLoop;
 	byte numRicetta = 0;
 
-	for (byte i = 90; i<100; i++){//Trova la prima ricetta libera
+	for (byte i = 90; i < 100; i++){//Trova la prima ricetta libera
 		if (EEPROM.read(i) == 0){
 			numRicetta = (i - 89);
 			i = 99;
@@ -1610,18 +1614,18 @@ void saveRecipe(){
 
 		Ricetta(numRicetta, 1);
 
-		while (pos<10){
+		while (pos < 10){
 			LCD_NomeRicetta(pos, NomeRicetta[pos]);
 			lcd.blink();
 
 			LeggiPulsante(Verso, Timer);
 			Set(NomeRicetta[pos], 122, 32, 1, Timer, Verso);
 
-			if ((NomeRicetta[pos]> 32 && NomeRicetta[pos]< 48) && Verso == 1)NomeRicetta[pos] = 48;
-			if ((NomeRicetta[pos]> 57 && NomeRicetta[pos]< 97) && Verso == 1)NomeRicetta[pos] = 97;
+			if ((NomeRicetta[pos] > 32 && NomeRicetta[pos] < 48) && Verso == 1)NomeRicetta[pos] = 48;
+			if ((NomeRicetta[pos]> 57 && NomeRicetta[pos] < 97) && Verso == 1)NomeRicetta[pos] = 97;
 
-			if ((NomeRicetta[pos]< 97 && NomeRicetta[pos]> 57) && Verso == 2)NomeRicetta[pos] = 57;
-			if (NomeRicetta[pos]< 48 && Verso == 2)NomeRicetta[pos] = 32;
+			if ((NomeRicetta[pos] < 97 && NomeRicetta[pos]> 57) && Verso == 2)NomeRicetta[pos] = 57;
+			if (NomeRicetta[pos] < 48 && Verso == 2)NomeRicetta[pos] = 32;
 
 			if (btn_Press(Button_enter, 50)){
 				pos++;
@@ -1632,7 +1636,7 @@ void saveRecipe(){
 			if ((digitalRead(Button_dn) == 0) && (digitalRead(Button_up) == 0)){
 				delay(350);
 				if ((digitalRead(Button_dn) == 0) && (digitalRead(Button_up) == 0)){
-					for (byte j = pos; j<10; j++){
+					for (byte j = pos; j < 10; j++){
 						NomeRicetta[pos] = 32;
 						pos++;
 					}pos = 9;
@@ -1640,7 +1644,7 @@ void saveRecipe(){
 			}
 
 			if (btn_Press(Button_start, 50)){
-				if (pos>0)pos--;
+				if (pos > 0)pos--;
 			}
 
 		}
@@ -1664,7 +1668,7 @@ void saveRecipe(){
 
 			//Parametri Ricetta
 			Da = 100 + ((numRicetta - 1) * 52);
-			for (byte j = 30; j<82; j++){
+			for (byte j = 30; j < 82; j++){
 				save_set(Da, (byte)EEPROM.read(j));
 				//delay(75);
 				Da++;
@@ -1672,7 +1676,7 @@ void saveRecipe(){
 
 
 			//Nome Ricetta
-			for (pos = 0; pos<10; pos++){
+			for (pos = 0; pos < 10; pos++){
 				save_set(620 + pos + ((numRicetta - 1) * 10), NomeRicetta[pos]);
 				//delay(75);
 				//EEPROM.write(620 + pos + ((numRicetta - 1)*10),NomeRicetta[pos]);
@@ -1695,7 +1699,7 @@ void deleteRecipe(){
 	RicettaUp = 0;
 	RicettaDwn = 0;
 
-	for (byte i = 90; i<100; i++){//Assegna il limite di ricette registrate
+	for (byte i = 90; i < 100; i++){//Assegna il limite di ricette registrate
 		if (EEPROM.read(i) == 1){
 			RicettaUp = (i - 89);
 			if (RicettaDwn == 0)RicettaDwn = RicettaUp;
@@ -1706,7 +1710,7 @@ void deleteRecipe(){
 		return;
 	}
 
-	for (byte i = RicettaDwn + 89; i<RicettaUp + 89 + 1; i++){//Trova la prima ricetta libera
+	for (byte i = RicettaDwn + 89; i < RicettaUp + 89 + 1; i++){//Trova la prima ricetta libera
 		numRicetta = i - 89;
 
 		while (ricettaLoop){
@@ -1746,7 +1750,7 @@ void initializeRecipe(){
 	}
 	else{
 		Inizializza();
-		for (byte i = 1; i<11; i++){
+		for (byte i = 1; i < 11; i++){
 			save_set(89 + i, (byte)0);
 			//EEPROM.write(89+i,0);
 		}
@@ -1827,7 +1831,7 @@ void set_hops(){
 
 	nmbrHops += 1;
 
-	for (byte i = 0; i<nmbrHops; i++){
+	for (byte i = 0; i < nmbrHops; i++){
 		hopLoop = true;
 		r_set(hopSet, blhpAddr);
 		while (hopLoop){
@@ -1860,7 +1864,7 @@ void set_hops(){
 		}blhpAddr += 1;
 	}
 
-	for (byte i = nmbrHops; i<11; i++){
+	for (byte i = nmbrHops; i < 11; i++){
 		save_set(blhpAddr, (byte)0);
 		blhpAddr += 1;
 	}
@@ -1927,11 +1931,9 @@ void setup_mode(){
 void setup(){
 	uniholic.begin();
 	// Start up the library
-	//Serial.begin(9600);
+	Serial.begin(9600);
 
 	// SETTING LCD*****
-	// Select your LCD
-	//  lcd.begin(16,2);
 	lcd.begin(20, 4);
 	pinMode(6, OUTPUT);
 	pinMode(7, OUTPUT);
@@ -1952,8 +1954,6 @@ void setup(){
 	myPID.SetMode(AUTOMATIC);
 
 	allOFF();
-	//heat_off(mheat);
-	//pump_off(mpump);
 
 	if (ScaleTemp == 0){
 		boilStageTemp = EEPROM.read(17);
