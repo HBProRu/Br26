@@ -85,11 +85,13 @@
     <ClInclude Include="LiquidCrystalRus.h" />
     <ClInclude Include="Pcb_Uniholic.h" />
     <ClInclude Include="Presentazione.h" />
+    <ClInclude Include="RTClib.h" />
     <ClInclude Include="Visual Micro\.Br26.vsarduino.h" />
     <ClInclude Include="WiFi_CC3000.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="LiquidCrystalRus.cpp" />
+    <ClCompile Include="RTClib.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

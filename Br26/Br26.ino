@@ -1,5 +1,6 @@
 ﻿
 
+
 #define DEBUG	false
 #define WIFI	false
 
@@ -20,7 +21,8 @@
 #include "DHT.h"
 #include <stdlib.h>
 #include <Uniholic.h>
-#include "DS1307_Wire.h"
+#include "RTClib.h"
+//#include "DS1307_Wire.h"
 
 #if WIFI == true
 #include "WiFi_CC3000.h"
