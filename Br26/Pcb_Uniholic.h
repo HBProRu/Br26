@@ -11,9 +11,9 @@ const char  Button_enter = 23;//A5;
 // outputs
 const int Pump = 3;
 const int Heat = 4;
+const int Heat2 = 5;
 const int Buzz = 18;
 
 // leds
 const int P_Led = 28;
 const int H_Led = 29;
-

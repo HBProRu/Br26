@@ -1,80 +1,4 @@
-/*
 
-brauduino semi automated single vessel RIMS
-created by s.mathison
-Copyright (C) 2012  Stephen Mathison
-
-Modified by Mike Wilson
-- Added INPUT_PULLUP to button inputs
-- swapped I/O ports for Buzz and Pump
-- changed to faherenheit
-- added heat and pump (H and P) indicators to the LCD
-- turned off pump during boil stage
-- added direct output% control and display during boil
-- saved boil heat % in EEPROM
-- 2v5 fixed hop addition when hoptime == boiltime
-- changed boil stage temp to 201 deg F.
-
-Modified by Massimo Nevi (2014)
-- Added Buzzer Modulation (NumBeep, Period)
-- Added Stage CountDown in Automatic Mode
-- Added Stage Watch in Manual Mode
-- Modified Max Number of Hops (10)
-- Modified stage Wait in Active Pause (PID Controlo On)
-- Modified H e P indicator for ON-OFF and Active-Disactive Modulation
-- Added Some Control Parameter in Configuration Menu
-- Added Temp Pump Stop in Manual Mode
-- Dual Scale Temp (°C-°F)
-- Reorganized EEPROM
-- Reorganized Configuration
-- Added Delayed Start
-- Added Alert before Mash In
-- Jump Step whit Button Press in Automatic Mode
-
-- Added Second Menu Configuration
-- Set Scale Temp (°C-°F)
-- Set Temp of Boil
-- Set Set Time Pump Cycle and Time Rest
-- Set Location of Temp Sensor
-- Set Pump ON-OFF at Boil
-- Set Temp Pump Stop
-- Set Calibration Temp
-
-- Reorganized Automation
-- Removed Number of Stages Setting
-- Fixed Name of Stages (8)
-- Dual A-Amylase Stage
-- Correct Mash In Stage
-- Auto Mash Design
-- Correct Time Reset of Pump
-- Added Iodine Test (Active Pause)
-
-- Stage Managing
-- Load Stage Set
-- Save Stage Set
-- Delete Stage Set
-- Initialize EEPROM
-
-- LCD 16x2 wiew
-- LCD 20x4 wiew
-- Italian Language
-- English Language
-- Spanish Language
-
-compiled on Arduino V1.0.5
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program.  If not, see <http://www.gnu.org/licenses/>.*/
 
 //libraries
 #include <EEPROM.h>
@@ -456,12 +380,14 @@ void allOFF(){
 
 void heat_on(){
 	digitalWrite(Heat, HIGH);
+	digitalWrite(Heat2, HIGH);
 	digitalWrite(H_Led, HIGH);
 	ledHeatON();
 }
 
 void heat_off(boolean mheat){
 	digitalWrite(Heat, LOW);
+	digitalWrite(Heat2, LOW);
 	digitalWrite(H_Led, LOW);
 	ledHeatStatus(mheat);
 }
@@ -2015,6 +1941,7 @@ void setup(){
 	pinMode(Button_start, INPUT_PULLUP);
 	pinMode(Button_enter, INPUT_PULLUP);
 	pinMode(Heat, OUTPUT);
+	pinMode(Heat2, OUTPUT);
 	pinMode(Pump, OUTPUT);
 	pinMode(Buzz, OUTPUT);
 	pinMode(H_Led, OUTPUT);
