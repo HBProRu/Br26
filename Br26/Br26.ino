@@ -1497,6 +1497,16 @@ void set_General(){
 	}Clear_2_3();
 }
 
+void set_DateTime(){
+	boolean generalLoop = false;
+	while (generalLoop){
+		if (btn_Press(Button_enter, 50)){
+			generalLoop = false;
+		}
+	}
+
+}
+
 byte Congruita(byte& numRicetta, byte Verso){
 	if (EEPROM.read(89 + numRicetta) == 0){
 		boolean Controllo = true;
@@ -1921,7 +1931,16 @@ void setup_mode(){
 			Menu_3_5();
 			if (btn_Press(Button_start, 50))setupLoop = false;
 			if (btn_Press(Button_up, 50))setupMenu = 3;
+			if(btn_Press(Button_dn, 50))setupMenu = 5;
 			if (btn_Press(Button_enter, 50))set_General();
+			break;
+
+		case(5) :
+			Menu_3_6();
+			if (btn_Press(Button_start, 50))setupLoop = false;
+			if (btn_Press(Button_up, 50))setupMenu = 4;
+			if (btn_Press(Button_enter, 50))set_DateTime();
+
 			break;
 
 		}

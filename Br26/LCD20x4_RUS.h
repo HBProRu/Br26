@@ -140,6 +140,13 @@ void LCD_SxEO(){
   lcd.print(char(126));
 }
 
+void LCD_xxEO(){
+	lcd.setCursor(1, 3);
+	//lcd.print(F("up   ---  quit  ok"));
+	lcd.print(F("--- --- выход  "));
+	lcd.print(char(126));
+}
+
 
 void Menu_1(){
   lcd.clear();
@@ -622,13 +629,19 @@ void MemoriaPiena(){
 void Menu_3_5(){
   lcd.setCursor(1,1);
   lcd.print(F(" Общие  настройки "));
-  LCD_SxEO();
+  LCD_SGEO();
 }
 
 void Menu_3_5_x(byte i){
   lcd.setCursor(1,2);
   lcd.print(GeneralName[i]);
   LCD_QQxO();
+}
+
+void Menu_3_6(){
+	lcd.setCursor(1, 1);
+	lcd.print(F("   Дата и время   "));
+	LCD_SxEO();
 }
 
 /*void viewCredits(byte X, byte Y, const char* Testo, int Pausa){
