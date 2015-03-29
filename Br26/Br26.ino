@@ -1503,10 +1503,166 @@ void set_General(){
 }
 
 void set_DateTime(){
-	boolean generalLoop = false;
-	while (generalLoop){
+	boolean setDtLoop = true;
+	int pos = 0;
+
+	byte daysInMonth[] = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
+
+	int dtStrArr[6][4] = {
+		{ 2000, 2050, 1, 4 },
+		{ 0, 12, 6, 2 },
+		{ 0, 31, 9, 2 },
+		{ 0, 24, 12, 2 },
+		{ 0, 59, 15, 2 },
+		{ 0, 59, 18, 2 }
+	};
+
+	LCD_SGEO();
+
+	DateTime now = RTC.now();
+	PrintDatetimeM36(getDateTimeNowStr());
+
+	while (setDtLoop){
+		lcd.setCursor(dtStrArr[pos][2],2);
+		LCDSpace(dtStrArr[pos][3]);
+		delay(250);
+		lcd.setCursor(dtStrArr[pos][2],2);
+		switch (pos)
+		{
+		case(0) :
+			lcd.print(String(dt.year(), DEC));
+			break;
+
+		case(1):
+			lcd.print(dateElementStr(String(now.month(), DEC)));
+			break;
+
+		case(2) :
+			lcd.print(dateElementStr(String(now.day(), DEC)));
+			break;
+
+		case(3) :
+			lcd.print(dateElementStr(String(now.hour(), DEC)));
+			break;
+
+		case(4) :
+			lcd.print(dateElementStr(String(now.minute(), DEC)));
+			break;
+
+		case(5) :
+			lcd.print(dateElementStr(String(now.second(), DEC)));
+			break;
+
+		default:
+			break;
+		}
+		delay(250);
+
+		if (btn_Press(Button_up, 50)){
+			switch (pos)
+			{
+			case(0) :
+				now = now.unixtime() + 365 * 86400L;
+				RTC.adjust(now);
+				PrintDatetimeM36(getDateTimeNowStr());
+				break;
+				
+			case(1) :
+				now = now.unixtime() + daysInMonth[now.month()] * 86400L;
+				RTC.adjust(now);
+				PrintDatetimeM36(getDateTimeNowStr());
+				break;
+
+			case(2) :
+				now = now.unixtime() + 86400L;
+				RTC.adjust(now);
+				PrintDatetimeM36(getDateTimeNowStr());
+				break;
+
+			case(3) :
+				now = now.unixtime() + 3600;
+				RTC.adjust(now);
+				PrintDatetimeM36(getDateTimeNowStr());
+				break;
+
+			case(4) :
+				now = now.unixtime() + 60;
+				RTC.adjust(now);
+				PrintDatetimeM36(getDateTimeNowStr());
+				break;
+
+			case(5) :
+				now = now.unixtime() + 1;
+				RTC.adjust(now);
+				PrintDatetimeM36(getDateTimeNowStr());
+				break;
+
+			default:
+				break;
+			}
+		}
+
+		if (btn_Press(Button_dn, 50)){
+			switch (pos)
+			{
+			case(0) :
+				now = now.unixtime() - 365 * 86400L;
+				RTC.adjust(now);
+				PrintDatetimeM36(getDateTimeNowStr());
+				break;
+
+			case(1) :
+				if (now.month() - 2 < 0) {
+					now = now.unixtime() - daysInMonth[now.month() - 2 + 12] * 86400L;
+				}
+				else {
+					now = now.unixtime() - daysInMonth[now.month() - 2] * 86400L;
+				}
+				RTC.adjust(now);
+				PrintDatetimeM36(getDateTimeNowStr());
+				break;
+
+			case(2) :
+				now = now.unixtime() - 86400L;
+				RTC.adjust(now);
+				PrintDatetimeM36(getDateTimeNowStr());
+				break;
+
+			case(3) :
+				now = now.unixtime() - 3600;
+				RTC.adjust(now);
+				PrintDatetimeM36(getDateTimeNowStr());
+				break;
+
+			case(4) :
+				now = now.unixtime() - 60;
+				RTC.adjust(now);
+				PrintDatetimeM36(getDateTimeNowStr());
+				break;
+
+			case(5) :
+				now = now.unixtime() - 1;
+				RTC.adjust(now);
+				PrintDatetimeM36(getDateTimeNowStr());
+				break;
+
+			default:
+				break;
+			}
+		}
+		
+		if (btn_Press(Button_start, 50)){
+			RTC.adjust(now);
+			setDtLoop = false;
+		}
 		if (btn_Press(Button_enter, 50)){
-			generalLoop = false;
+			if (pos < 5) { 
+				pos++;
+			}
+			else
+			{
+				pos = 0;
+			};
 		}
 	}
 
@@ -1942,14 +2098,29 @@ void setup_mode(){
 
 		case(5) :
 			Menu_3_6();
-			if (btn_Press(Button_start, 50))setupLoop = false;
-			if (btn_Press(Button_up, 50))setupMenu = 4;
-			if (btn_Press(Button_enter, 50))set_DateTime();
-
+			boolean loop36 = true;
+			while (loop36) {
+				PrintDatetimeM36(getDateTimeNowStr());
+				if (btn_Press(Button_start, 50)){
+					loop36 = false;
+					setupLoop = false;
+				}
+				if (btn_Press(Button_up, 50)) {
+					loop36 = false;
+					setupMenu = 4;
+				}
+				if (btn_Press(Button_enter, 50)) {
+					loop36 = false;
+					set_DateTime();
+				}
+			}
 			break;
 
 		}
-	}lcd.clear();
+	}
+	lcd.clear();
+	LCD_Default(lastTemp);
+
 }
 
 void setup(){
@@ -1962,7 +2133,9 @@ void setup(){
 	Wire.begin();
 	RTC.begin();
 	if (!RTC.isrunning()) {
-		Serial.println("RTC is NOT running!");
+		#if DEBUG == true
+			Serial.println("RTC is NOT running!");
+		#endif
 		// following line sets the RTC to the date & time this sketch was compiled
 		RTC.adjust(DateTime(__DATE__, __TIME__));
 	}
@@ -1987,6 +2160,8 @@ void setup(){
 	//tell the PID to range between 0 and the full window size
 	myPID.SetMode(AUTOMATIC);
 
+	
+
 	allOFF();
 
 	if (ScaleTemp == 0){
@@ -2003,6 +2178,8 @@ void setup(){
 	if (contrast == 0 || contrast > 50)contrast = 0;
 
 	analogWrite(7, contrast);
+	
+	
 	//ArdBir();
 
 	Gradi();
@@ -2138,19 +2315,19 @@ void loop(){
 		};
 		//getDateDs(p_DT);
 		#if DEBUG == true
-		dt = RTC.now();
-		Serial.print(dt.year(), DEC);
-		Serial.print('/');
-		Serial.print(dt.month(), DEC);
-		Serial.print('/');
-		Serial.print(dt.day(), DEC);
-		Serial.print(' ');
-		Serial.print(dt.hour(), DEC);
-		Serial.print(':');
-		Serial.print(dt.minute(), DEC);
-		Serial.print(':');
-		Serial.print(dt.second(), DEC);
-		Serial.println();
+			dt = RTC.now();
+			Serial.print(dt.year(), DEC);
+			Serial.print('/');
+			Serial.print(dt.month(), DEC);
+			Serial.print('/');
+			Serial.print(dt.day(), DEC);
+			Serial.print(' ');
+			Serial.print(dt.hour(), DEC);
+			Serial.print(':');
+			Serial.print(dt.minute(), DEC);
+			Serial.print(':');
+			Serial.print(dt.second(), DEC);
+			Serial.println();
 		#endif
 		PrintTime(getTimeNowStr());
 		
