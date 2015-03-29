@@ -9,9 +9,9 @@ const char  Button_start = 22;//A4;
 const char  Button_enter = 23;//A5;
 
 // outputs
-const int Pump = 3;
+const int Pump = 5;
 const int Heat = 4;
-const int Heat2 = 5;
+const int Heat2 = 3;
 const int Buzz = 18;
 
 // leds
