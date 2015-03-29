@@ -802,7 +802,7 @@ void PausaPompa(float Temp, int Time){
 	CntDwn(Time);
 
 	lcd.setCursor(1, 3);
-	lcd.print(F("- Постой насоса - "));
+	lcd.print(F("- Простой насоса -"));
 
 	//  Ciclo++;
 }
