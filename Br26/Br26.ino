@@ -898,7 +898,9 @@ void manual_mode(){
 			if (mpump)pump_rest(10); //Forced Stage for Pump Control (only OverTemp control)
 
 		}CntDwn(TimeSpent);
-	}lcd.clear();
+	}
+	lcd.clear();
+	LCD_Default(lastTemp);
 }
 
 void WaitStart(){
