@@ -1,13 +1,10 @@
-﻿
-
-
-#define DEBUG	true
+﻿#define DEBUG	true
 #define WIFI	false
 
 //libraries
 #include <EEPROM.h>
 #include "LiquidCrystalRus.h"
-#include <OneWire.h>
+#include "OneWire.h"
 #include <PID_v1.h>
 //#include <SD.h>
 #include <Wire.h>

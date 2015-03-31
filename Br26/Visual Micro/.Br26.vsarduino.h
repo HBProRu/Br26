@@ -86,6 +86,8 @@ extern "C" void __cxa_pure_virtual() {;}
 #include <LCD20x4_RUS.h>
 #include <LiquidCrystalRus.cpp>
 #include <LiquidCrystalRus.h>
+#include <OneWire.cpp>
+#include <OneWire.h>
 #include <Pcb_Uniholic.h>
 #include <Presentazione.h>
 #include <RTClib.cpp>
