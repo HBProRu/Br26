@@ -88,9 +88,13 @@ extern "C" void __cxa_pure_virtual() {;}
 #include <LiquidCrystalRus.h>
 #include <OneWire.cpp>
 #include <OneWire.h>
+#include <PID_v1.cpp>
+#include <PID_v1.h>
 #include <Pcb_Uniholic.h>
 #include <Presentazione.h>
 #include <RTClib.cpp>
 #include <RTClib.h>
+#include <Uniholic.cpp>
+#include <Uniholic.h>
 #include <WiFi_CC3000.h>
 #endif

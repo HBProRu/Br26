@@ -1,4 +1,5 @@
-﻿#define DEBUG	true
+﻿
+#define DEBUG	true
 #define WIFI	false
 
 //libraries
@@ -17,7 +18,7 @@
 #include "utility/sntp.h"
 #include "DHT.h"
 #include <stdlib.h>
-#include <Uniholic.h>
+#include "Uniholic.h"
 #include "RTClib.h"
 //#include "DS1307_Wire.h"
 
