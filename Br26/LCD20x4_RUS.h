@@ -847,8 +847,8 @@ void PumpPrime(){
 void ledHeatON(){
 	lcd.setCursor(0, 1);
 	lcd.write(6);
-	//  lcd.setCursor(0,19);
-	//  lcd.write(6);
+	lcd.setCursor(19, 1);
+	lcd.write(6);
 
 }
 
@@ -856,9 +856,9 @@ void ledHeatStatus(boolean mheat){
 	lcd.setCursor(0, 1);
 	if (mheat)lcd.write(5);
 	else LCDSpace(1);
-	/*  lcd.setCursor(0,19);
-	  if (mheat)lcd.write(5);
-	  else LCDSpace(1);*/
+	lcd.setCursor(19, 1);
+	if (mheat)lcd.write(5);
+	else LCDSpace(1);
 }
 
 void ledPumpON(){

@@ -17,3 +17,4 @@ const int Buzz = 18;
 // leds
 const int P_Led = 28;
 const int H_Led = 29;
+const int H_Led2 = 30;

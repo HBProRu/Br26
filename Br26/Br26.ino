@@ -391,6 +391,7 @@ void heat_on(){
 	digitalWrite(Heat, HIGH);
 	digitalWrite(Heat2, HIGH);
 	digitalWrite(H_Led, HIGH);
+	digitalWrite(H_Led2, HIGH);
 	ledHeatON();
 }
 
@@ -398,6 +399,7 @@ void heat_off(boolean mheat){
 	digitalWrite(Heat, LOW);
 	digitalWrite(Heat2, LOW);
 	digitalWrite(H_Led, LOW);
+	digitalWrite(H_Led2, LOW);
 	ledHeatStatus(mheat);
 }
 
@@ -2156,6 +2158,7 @@ void setup(){
 	pinMode(Pump, OUTPUT);
 	pinMode(Buzz, OUTPUT);
 	pinMode(H_Led, OUTPUT);
+	pinMode(H_Led2, OUTPUT);
 	pinMode(P_Led, OUTPUT);
 	w_StartTime = millis();
 
