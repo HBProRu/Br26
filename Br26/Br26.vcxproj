@@ -85,6 +85,7 @@
     <ClInclude Include="LiquidCrystalRus.h" />
     <ClInclude Include="OneWire.h" />
     <ClInclude Include="Pcb_Uniholic.h" />
+    <ClInclude Include="PID_v1.h" />
     <ClInclude Include="Presentazione.h" />
     <ClInclude Include="RTClib.h" />
     <ClInclude Include="Visual Micro\.Br26.vsarduino.h" />
@@ -93,6 +94,7 @@
   <ItemGroup>
     <ClCompile Include="LiquidCrystalRus.cpp" />
     <ClCompile Include="OneWire.cpp" />
+    <ClCompile Include="PID_v1.cpp" />
     <ClCompile Include="RTClib.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
