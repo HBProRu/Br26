@@ -25,10 +25,6 @@
 #if WIFI == true
 #include "WiFi_CC3000.h"
 #endif
-// SETTING PCB*****
-// Select your PCB Version
-
-// Testing PCB
 
 // Supported PCB
 #include "Pcb_Uniholic.h"
@@ -37,9 +33,6 @@
 #include "Presentazione.h"
 #include "ArdBir1.h"
 #include "Functions.h"
-
-// SETTING LCD*****
-// Select your LCD
 
 // LANGUAGE RUS
 //#include "LCD16x2_ENG.h"
@@ -76,8 +69,6 @@ boolean IodineTest = false;
 //boolean IodineTest2  = false;
 boolean DelayedMode = false;
 boolean DebugMode = false;
-//True - выводить сообщения в консоль
-//False - не выводить отладочные сообщения
 
 
 float mset_temp;
@@ -137,8 +128,6 @@ DateTime dt;
 // ******** start of  the funtions ********
 // ****************************************
 
-
-
 /*
 int freeRam () {
 extern int __heap_start, *__brkval;
@@ -165,8 +154,6 @@ void pauseStage(){
 		stage_pause = true;
 
 		allOFF();
-		//heat_off(mheat);
-		//pump_off(mpump);
 
 		while (stage_pause){
 			Temperature();
