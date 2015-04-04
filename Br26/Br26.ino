@@ -1,29 +1,33 @@
-﻿
+﻿#include "Adafruit_CC3000_Server.h"
 #define DEBUG	true
-#define WIFI	false
+#define WIFI	true
 
 //libraries
 #include <EEPROM.h>
+#include <stdlib.h>
+
 #include "LiquidCrystalRus.h"
 #include "OneWire.h"
 #include "PID_v1.h"
 //#include <SD.h>
-#include <Wire.h>
+#include "Wire.h"
 //#include <Serial.h>
-#include <Adafruit_CC3000.h>
-#include <ccspi.h>
-#include <SPI.h>
+
 #include <string.h>
-#include "utility/debug.h"
-#include "utility/sntp.h"
+
 #include "DHT.h"
-#include <stdlib.h>
+
 #include "Uniholic.h"
 #include "RTClib.h"
 //#include "DS1307_Wire.h"
 
 #if WIFI == true
-#include "WiFi_CC3000.h"
+	#include "SPI.h"
+	#include "cc_spi.h"
+	#include "Adafruit_CC3000.h"
+	//#include "WiFi_CC3000.h"
+	#include "cc_util_debug.h"
+	#include "cc_util_sntp.h"
 #endif
 
 // Supported PCB
@@ -2185,6 +2189,8 @@ void setup(){
 
 	// cc3000_init();
 
+
+
 	//setupe();
 	// UpdateNTPTime();
 	// setDateDs1307(String(timeExtract.sec).toInt(),        // 0-59
@@ -2346,3 +2352,15 @@ void loop(){
 		break;
 	}
 }
+
+
+//Секция функций для работы с WiFi
+
+#if WIFI == true
+
+
+
+
+
+
+#endif
