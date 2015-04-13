@@ -1,6 +1,5 @@
-﻿#include "Adafruit_CC3000_Server.h"
-#define DEBUG	true
-#define WIFI	true
+﻿#define DEBUG	false		
+#define WIFI	false
 
 //libraries
 #include <EEPROM.h>
@@ -15,19 +14,19 @@
 
 #include <string.h>
 
-#include "DHT.h"
-
 #include "Uniholic.h"
 #include "RTClib.h"
 //#include "DS1307_Wire.h"
 
 #if WIFI == true
-	#include "SPI.h"
-	#include "cc_spi.h"
-	#include "Adafruit_CC3000.h"
-	//#include "WiFi_CC3000.h"
-	#include "cc_util_debug.h"
-	#include "cc_util_sntp.h"
+
+#include "SPI.h"
+#include "cc_spi.h"
+#include "Adafruit_CC3000.h"
+//#include "WiFi_CC3000.h"
+#include "cc_util_debug.h"
+#include "cc_util_sntp.h"
+
 #endif
 
 // Supported PCB
@@ -127,6 +126,32 @@ Uniholic uniholic;
 //Модуль часов реального времени
 RTC_DS1307 RTC;
 DateTime dt;
+
+//Модуль СС3000
+#if WIFI == true
+
+// Define CC3000 chip pins
+//define ADAFRUIT_CC3000_IRQ   8
+//#define ADAFRUIT_CC3000_VBAT  9
+//#define ADAFRUIT_CC3000_CS    10
+Adafruit_CC3000 cc3000 = Adafruit_CC3000(SPI_CLOCK_DIV2);
+
+boolean wifi_enabled = false;
+
+// WiFi network (change with your settings !)
+//#define WLAN_SSID       "ABCD"        // cannot be longer than 32 characters!
+//#define WLAN_PASS       "0987654321"
+#define WLAN_SSID       "MyInet"        // cannot be longer than 32 characters!
+#define WLAN_PASS       "Inet724I"
+
+#define WLAN_SECURITY   WLAN_SEC_WPA2 // This can be WLAN_SEC_UNSEC, WLAN_SEC_WEP, WLAN_SEC_WPA or WLAN_SEC_WPA2
+#define WEBSITE         "dvc.hbpro.ru"
+#define IDLE_TIMEOUT_MS  100
+
+#endif
+
+
+
 
 // ****************************************
 // ******** start of  the funtions ********
@@ -654,15 +679,18 @@ void stage_loop(){
 			//if ((x-1)==6 && IodineTest1==false)Iodine_Test();
 			//if ((x-1)==7 && IodineTest2==false)Iodine_Test();
 
-			if ((x - 1) == 8 && tempBoilReached && Temp_Now >= boilStageTemp) {  //if temp reached during boil
 
+			//if ((x - 1) == 8 && tempBoilReached && Temp_Now >= boilStageTemp) {  //if temp reached during boil
+			if ((x - 1) == 8) {
+				if (Temp_Now >= boilStageTemp) {
+					tempBoilReached = true;
+				};
 				Set(boil_output, 100, 0, 1, Timer, Verso);
 				Output = boil_output;
 
 				Boil(boil_output, Temp_Now, 1);
 				PID_HEAT(false); //set heat in manual mode
-			}
-			else{
+			} else{
 
 				float Max, Min;
 				if (ScaleTemp == 0){
@@ -1516,17 +1544,17 @@ void set_DateTime(){
 	PrintDatetimeM36(getDateTimeNowStr());
 
 	while (setDtLoop){
-		lcd.setCursor(dtStrArr[pos][2],2);
+		lcd.setCursor(dtStrArr[pos][2], 2);
 		LCDSpace(dtStrArr[pos][3]);
 		delay(250);
-		lcd.setCursor(dtStrArr[pos][2],2);
+		lcd.setCursor(dtStrArr[pos][2], 2);
 		switch (pos)
 		{
 		case(0) :
 			lcd.print(String(dt.year(), DEC));
 			break;
 
-		case(1):
+		case(1) :
 			lcd.print(dateElementStr(String(now.month(), DEC)));
 			break;
 
@@ -1559,7 +1587,7 @@ void set_DateTime(){
 				RTC.adjust(now);
 				PrintDatetimeM36(getDateTimeNowStr());
 				break;
-				
+
 			case(1) :
 				now = now.unixtime() + daysInMonth[now.month()] * 86400L;
 				RTC.adjust(now);
@@ -1643,13 +1671,13 @@ void set_DateTime(){
 				break;
 			}
 		}
-		
+
 		if (btn_Press(Button_start, 50)){
 			RTC.adjust(now);
 			setDtLoop = false;
 		}
 		if (btn_Press(Button_enter, 50)){
-			if (pos < 5) { 
+			if (pos < 5) {
 				pos++;
 			}
 			else
@@ -2085,7 +2113,7 @@ void setup_mode(){
 			Menu_3_5();
 			if (btn_Press(Button_start, 50))setupLoop = false;
 			if (btn_Press(Button_up, 50))setupMenu = 3;
-			if(btn_Press(Button_dn, 50))setupMenu = 5;
+			if (btn_Press(Button_dn, 50))setupMenu = 5;
 			if (btn_Press(Button_enter, 50))set_General();
 			break;
 
@@ -2117,18 +2145,21 @@ void setup_mode(){
 }
 
 void setup(){
+
 	uniholic.begin();
 	// Start up the library
-	#if DEBUG == true
-		Serial.begin(115200);	
-	#endif
+#if DEBUG == true
+	Serial.begin(115200);
+//#define DEBUG_MODE 1;
+#endif
 
 	Wire.begin();
 	RTC.begin();
+
 	if (!RTC.isrunning()) {
-		#if DEBUG == true
-			Serial.println("RTC is NOT running!");
-		#endif
+#if DEBUG == true
+		Serial.println("RTC is NOT running!");
+#endif
 		// following line sets the RTC to the date & time this sketch was compiled
 		RTC.adjust(DateTime(__DATE__, __TIME__));
 	}
@@ -2154,7 +2185,7 @@ void setup(){
 	//tell the PID to range between 0 and the full window size
 	myPID.SetMode(AUTOMATIC);
 
-	
+
 
 	allOFF();
 
@@ -2172,8 +2203,8 @@ void setup(){
 	if (contrast == 0 || contrast > 50)contrast = 0;
 
 	analogWrite(7, contrast);
-	
-	
+
+
 	//ArdBir();
 
 	Gradi();
@@ -2248,7 +2279,7 @@ String dateElementStr(String str) {
 	}
 }
 
-void loop(){
+void loop() {
 	boolean StartNow = false;
 
 	pumpTime = 0;
@@ -2310,23 +2341,23 @@ void loop(){
 			lastTemp = Temp_Now;
 		};
 		//getDateDs(p_DT);
-		#if DEBUG == true
-			dt = RTC.now();
-			Serial.print(dt.year(), DEC);
-			Serial.print('/');
-			Serial.print(dt.month(), DEC);
-			Serial.print('/');
-			Serial.print(dt.day(), DEC);
-			Serial.print(' ');
-			Serial.print(dt.hour(), DEC);
-			Serial.print(':');
-			Serial.print(dt.minute(), DEC);
-			Serial.print(':');
-			Serial.print(dt.second(), DEC);
-			Serial.println();
-		#endif
+#if DEBUG == true
+		dt = RTC.now();
+		Serial.print(dt.year(), DEC);
+		Serial.print('/');
+		Serial.print(dt.month(), DEC);
+		Serial.print('/');
+		Serial.print(dt.day(), DEC);
+		Serial.print(' ');
+		Serial.print(dt.hour(), DEC);
+		Serial.print(':');
+		Serial.print(dt.minute(), DEC);
+		Serial.print(':');
+		Serial.print(dt.second(), DEC);
+		Serial.println();
+#endif
 		PrintTime(getTimeNowStr());
-		
+
 		//loope();
 
 		//   if (!cc3000.begin())
@@ -2351,6 +2382,69 @@ void loop(){
 		if (btn_Press(Button_up, 2500))mainMenu = 4;
 		break;
 	}
+
+#if WIFI == true
+	if (!wifi_enabled)
+	{
+		// Initialise the CC3000
+		Serial.println(F("\nInitialising the CC3000..."));
+
+		if (!cc3000.begin())
+		{
+			Serial.println(F("Unable to initialise the CC3000! Check your wiring?"));
+			while (1);
+		}
+
+		// Delete old connection data
+		Serial.println(F("Deleting old connection profiles..."));
+		if (!cc3000.deleteProfiles()) {
+			Serial.println(F("Failed!"));
+			while (1);
+		}
+
+		// Connect to Wifi
+		Serial.print(F("Attempting to connect to ")); Serial.print(WLAN_SSID); Serial.println(F("..."));
+
+		if (!cc3000.connectToAP(WLAN_SSID, WLAN_PASS, WLAN_SECURITY)) {
+			Serial.println(F("Failed!"));
+			while (1);
+		}
+
+		Serial.print(F("Connected to ")); Serial.print(WLAN_SSID); Serial.println(F("..."));
+
+
+		// Wait for DHCP to finish
+		Serial.println(F("Request DHCP..."));
+		while (!cc3000.checkDHCP())
+		{
+			delay(100); // ToDo: Insert a DHCP timeout!
+		}
+
+
+		// Show the connection details
+		uint32_t ipAddress, netmask, gateway, dhcpserv, dnsserv;
+
+		if (!cc3000.getIPAddress(&ipAddress, &netmask, &gateway, &dhcpserv, &dnsserv))
+		{
+			Serial.println(F("Unable to retrieve the IP Address!"));
+		}
+		else
+		{
+			Serial.println("Connection info...");
+			Serial.print(F("\nIP Addr: ")); cc3000.printIPdotsRev(ipAddress);
+			Serial.print(F("\nNetmask: ")); cc3000.printIPdotsRev(netmask);
+			Serial.print(F("\nGateway: ")); cc3000.printIPdotsRev(gateway);
+			Serial.print(F("\nDHCPsrv: ")); cc3000.printIPdotsRev(dhcpserv);
+			Serial.print(F("\nDNSserv: ")); cc3000.printIPdotsRev(dnsserv);
+			Serial.println("\n");
+		}
+
+
+		wifi_enabled = true;
+	}
+	
+#endif
+
 }
 
 
@@ -2358,7 +2452,27 @@ void loop(){
 
 #if WIFI == true
 
+//Инициализация модуля СС3000
+boolean cc3000_init()
+{
 
+#if DEBUG == true
+	Serial.println(F("\nИнициализация СС3000..."));
+#endif
+	if (!cc3000.begin())
+	{
+#if DEBUG == true
+		Serial.println(F("Не удалось инициализировать CC3000"));
+#endif
+		return false;
+	}
+	else {
+#if DEBUG == true
+		Serial.println(F("Инициализация выполнена успешно"));
+#endif	
+		return true;
+	}
+}
 
 
 
