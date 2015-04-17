@@ -1,6 +1,6 @@
 ﻿#define DEBUG	false		
 #define WIFI	false
-#define Sound	FALSE	//FALSE, PASSIVE or ACTIVE
+#define Buzzer	FALSE	//FALSE, PASSIVE or ACTIVE
 
 //libraries
 #include <EEPROM.h>
@@ -169,7 +169,7 @@ return (int) &v - (__brkval == 0 ? (int) &__heap_start : (int) __brkval);
 
 void Beep(byte NumBeep, int Period)
 {
-#if Sound == PASSIVE
+#if Buzzer == PASSIVE
 	for (byte i = 0; i < NumBeep; i++)
 	{
 		for (long k = 0; k < 2400; k++) {
@@ -180,7 +180,7 @@ void Beep(byte NumBeep, int Period)
 		}
 		delay(Period);
 	}
-#elif Sound == ACTIVE
+#elif Buzzer == ACTIVE
 	for (byte i=0; i < NumBeep; i++){
 		digitalWrite (Buzz, HIGH);
 		delay(Period);
@@ -205,7 +205,7 @@ void Gradi(){
 void pauseStage(){
 	boolean stage_pause = false;
 	if (btn_Press(Button_start, 250)){
-		Buzzer(3, 100);
+		Beep(3, 100);
 		stage_pause = true;
 
 		allOFF();
@@ -216,7 +216,7 @@ void pauseStage(){
 			delay(75);
 			if (btn_Press(Button_start, 250))stage_pause = false;
 		}
-		Buzzer(3, 100);
+		Beep(3, 100);
 		Menu_2();
 	}
 }
@@ -396,7 +396,7 @@ boolean wait_for_confirm(boolean& test, byte Stato, byte Tipo, byte Display){
 		}
 		else{
 			if (Attesa == 255){
-				Buzzer(2, 25);
+				Beep(2, 25);
 				Attesa = 0;
 			}
 		}
@@ -650,14 +650,14 @@ void hop_add(){
 	if (hopAdd < nmbrHops){
 
 		if (stageTime == hopTime){
-			Buzzer(4, 250);
+			Beep(4, 250);
 			HopAdd(hopAdd);
 			CntDwn(TimeLeft);
 
-			if (TimeLeft < 6)Buzzer(1, 150);
+			if (TimeLeft < 6)Beep(1, 150);
 
 			delay(2500);
-			Buzzer(1, 750);
+			Beep(1, 750);
 			hopAdd++;
 			EEPROM.write(85, hopAdd);
 			blhpAddr++;
@@ -693,13 +693,13 @@ void stage_loop(){
 
 		if (pumpRest){
 			PausaPompa(Temp_Now, TimeLeft);
-			if (TimeSpent % 30 == 0)Buzzer(1, 65);
+			if (TimeSpent % 30 == 0)Beep(1, 65);
 			delay(135);
 		}
 		else{
 			if ((x - 1) != 0) CntDwn(TimeLeft);
-			if (TimeLeft < 6) Buzzer(1, 150);
-			if (TimeLeft == 0) Buzzer(1, 1000);
+			if (TimeLeft < 6) Beep(1, 150);
+			if (TimeLeft == 0) Beep(1, 1000);
 
 			if ((x - 1) == 7 && IodineTest == false)Iodine_Test();
 			//if ((x-1)==6 && IodineTest1==false)Iodine_Test();
@@ -764,9 +764,9 @@ void stage_loop(){
 
 		if (btn_Press(Button_enter, 2500)){
 			boolean flag_SaltoStep;
-			//Buzzer(3,50);
+			//Beep(3,50);
 			//delay(200);
-			Buzzer(3, 50);
+			Beep(3, 50);
 
 			SaltoStep();
 			//LCD_Procedo();
@@ -785,6 +785,7 @@ void add_malt(){
 	pump_off(mpump);
 
 	AddMalt();
+	Beep(1, 1000);
 
 	wait_for_confirm(malt, 1, 2, 1);
 	if (malt == false){
@@ -819,7 +820,7 @@ void Iodine_Test(){
 
 		Iodine(Temp_Now, TimeSpent);
 
-		if (TimeSpent % 45 == 0)Buzzer(1, 65);
+		if (TimeSpent % 45 == 0)Beep(1, 65);
 		delay(135);
 
 		quit_mode(Test);
@@ -850,6 +851,7 @@ void remove_malt(){
 	pumpTime = 0;
 
 	RemoveMalt();
+	Beep(1, 1500);
 
 	// Pausa senza PID (gli enzimi ormai sono distrutti)
 	wait_for_confirm(malt, 2, 2, 1);
@@ -876,6 +878,7 @@ void manual_mode(){
 	r_set(boil_output, 8);
 
 	prompt_for_water();
+	Beep(1, 750);
 	wait_for_confirm(manualLoop, 2, 2, 2);
 
 	Menu_1();//Pulisce lo schermo
@@ -906,7 +909,7 @@ void manual_mode(){
 
 		if (tempReached){
 			if (reachedBeep == false){
-				Buzzer(4, 125);
+				Beep(4, 125);
 				reachedBeep = true;
 			}
 		}
@@ -1000,7 +1003,7 @@ void WaitStart(){
 			}
 
 		}
-		Buzzer(5, 250);
+		Beep(5, 250);
 		Clear_2_3();
 
 	}
@@ -1031,6 +1034,7 @@ void auto_mode(){
 	//  check_for_resume();
 	if (EEPROM.read(82)){ // FLAG Automode Started
 		Resume();
+		Beep(1, 750);
 
 		wait_for_confirm(resume, 2, 2, 2);
 		if (resume == true){
@@ -1044,6 +1048,7 @@ void auto_mode(){
 
 	if (!(resume)){  // if starting a new process prompt for water
 		prompt_for_water();
+		Beep(1, 750);
 		wait_for_confirm(b_Enter, 2, 2, 2);
 
 		Menu_2();//pulisce lo schermo
@@ -1143,6 +1148,8 @@ void auto_mode(){
 
 		if (b_Enter){    // finishes the brewing process
 			End();
+			Beep(1, 3000);
+			delay(2500);
 
 			EEPROM.write(82, 0); // sets auto start byte to 0 for resume
 			EEPROM.write(85, 0); // sets hop count to 0
@@ -1757,6 +1764,8 @@ void loadRecipe(){
 	}
 	if (RicettaUp == 0){
 		NoRecipe();
+		Beep(3, 50);
+		delay(1500);
 		return;
 	}
 
@@ -1784,7 +1793,12 @@ void loadRecipe(){
 			}
 			if (btn_Press(Button_start, 50)){
 				Clear_2_3();
-				LeggoRicetta(numRicetta);
+
+				LeggoRicetta1();
+				Beep(2, 35);
+				delay(1500);
+				LeggoRicetta2(numRicetta);
+				delay(1500);
 				//SwapRecipe(numRicetta, 0);
 
 				int Da;
@@ -1814,7 +1828,13 @@ void saveRecipe(){
 		}
 	}
 
-	if (numRicetta == 0) MemoriaPiena();
+	if (numRicetta == 0) { 
+		MemoriaPiena1();
+		Beep(3, 125);
+		delay(1500);
+		MemoriaPiena2();
+		delay(2000);
+	}
 	else {
 		byte Verso = 0;
 		unsigned long Timer = 0;
@@ -1879,7 +1899,11 @@ void saveRecipe(){
 			return;
 		}
 		else{
-			SalvaRicetta();
+			SalvaRicetta1();
+			Beep(5, 35);
+			delay(1500);
+			SalvaRicetta2();
+			delay(1500);
 			//SwapRecipe(numRicetta, 1);
 
 			int Da;
@@ -1925,6 +1949,8 @@ void deleteRecipe(){
 	}
 	if (RicettaUp == 0){
 		NoRecipe();
+		Beep(3, 50);
+		delay(1500);
 		return;
 	}
 
@@ -1944,7 +1970,13 @@ void deleteRecipe(){
 				i = 100;
 			}
 			if (btn_Press(Button_start, 50)){
-				Cancellazione(numRicetta);
+				
+				Cancellazione1();
+				Beep(2, 35);
+				delay(1500);
+				Cancellazione2();
+				delay(1500);
+
 				save_set(89 + numRicetta, (byte)0);
 				//EEPROM.write(89+numRicetta,0);
 				ricettaLoop = false;
@@ -1968,6 +2000,8 @@ void initializeRecipe(){
 	}
 	else{
 		Inizializza();
+		Beep(3, 75);
+		delay(1500);
 		for (byte i = 1; i < 11; i++){
 			save_set(89 + i, (byte)0);
 			//EEPROM.write(89+i,0);

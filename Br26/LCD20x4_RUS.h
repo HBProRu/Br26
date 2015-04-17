@@ -177,9 +177,7 @@ void AddMalt(){
 	//lcd.setCursor(2,2);
 	lcd.setCursor(1, 2);
 	lcd.print(F(" Засыпь  внесена? "));
-
 	LCD_Procedo();
-	Buzzer(1, 1000);
 }
 
 void Stage(byte Stage, float Set, float Temp){
@@ -211,7 +209,6 @@ void RemoveMalt(){
 	lcd.setCursor(1, 2);
 	lcd.print(F("Дробина извлечена?"));
 	LCD_Procedo();
-	Buzzer(1, 1500);
 }
 
 void Temp_Wait(float Temp){
@@ -481,12 +478,8 @@ void Menu_3_4_4(){
 
 void NoRecipe(){
 	LCDClear(2);
-
 	lcd.setCursor(1, 3);
 	lcd.print(F("Ничего не найдено "));
-
-	Buzzer(3, 50);
-	delay(1500);
 }
 
 void Ricetta(byte numRicetta, byte Tipo){
@@ -512,14 +505,13 @@ void LCD_NomeRicetta(byte pos, byte Lettera){
 	lcd.print((char)Lettera);
 }
 
-void LeggoRicetta(byte Ricetta){
+void LeggoRicetta1(){
 	LCDClear(2);
-
 	lcd.setCursor(1, 3);
 	lcd.print(F("   Загрузка ...   "));
-	Buzzer(2, 35);
-	delay(1500);
+}
 
+void LeggoRicetta2(byte Ricetta){
 	lcd.setCursor(1, 3);
 	//lcd.print(F("Setting "));
 	//lcd.print(F("Рецепт "));
@@ -529,7 +521,6 @@ void LeggoRicetta(byte Ricetta){
 	lcd.print(Ricetta);
 	//lcd.print(F(" Loaded "));
 	//lcd.print(F(" загруж "));
-	delay(1500);
 }
 
 
@@ -545,17 +536,15 @@ void SalvataggioRicetta(byte Ricetta){
 	LCD_Procedo();
 }
 
-void SalvaRicetta(){
+void SalvaRicetta1(){
 	LCDClear(2);
-
 	lcd.setCursor(1, 3);
 	lcd.print(F("  Сохранение ...  "));
-	Buzzer(5, 35);
-	delay(1500);
+}
 
+void SalvaRicetta2(){
 	lcd.setCursor(1, 3);
 	lcd.print(F(" Рецепт сохранен  "));
-	delay(1500);
 }
 
 void CancelloRicetta(byte Ricetta){
@@ -570,17 +559,15 @@ void CancelloRicetta(byte Ricetta){
 	LCD_Procedo();
 }
 
-void Cancellazione(byte Ricetta){
+void Cancellazione1(){
 	LCDClear(2);
-
 	lcd.setCursor(1, 3);
 	lcd.print(F("   Удаление ...   "));
-	Buzzer(2, 35);
-	delay(1500);
+}
 
+void Cancellazione2(){
 	lcd.setCursor(1, 3);
 	lcd.print(F("  Рецепт удален   "));
-	delay(1500);
 }
 
 void Inizializzazione(){
@@ -589,36 +576,30 @@ void Inizializzazione(){
 
 	LCD_Procedo();
 }
+
 void Inizializza(){
 	LCDClear(2);
 
 	lcd.setCursor(1, 3);
 	//lcd.print(F(" Initialize EEPROM"));
 	lcd.print(F("Инициализ. EEPROM "));
-	delay(1500);
-
 	lcd.setCursor(1, 3);
 	//lcd.print(F("  EEPROM   ready  "));
 	lcd.print(F("  EEPROM   готов  "));
-	Buzzer(3, 75);
-	delay(1500);
+
 }
 
-void MemoriaPiena(){
+void MemoriaPiena1(){
 	LCDClear(2);
-
 	lcd.setCursor(1, 3);
 	//lcd.print(F("    ATTENZIONE    "));
 	lcd.print(F("     ВНИМАНИЕ     "));
-	Buzzer(3, 125);
-	delay(1500);
-
-	lcd.setCursor(1, 3);
-	//lcd.print(F("   FULL  MEMORY   "));
-	lcd.print(F(" ПАМЯТЬ ЗАПОЛНЕНА "));
-	delay(2000);
 }
 
+void MemoriaPiena2(){
+	lcd.setCursor(1, 3);
+	lcd.print(F(" ПАМЯТЬ ЗАПОЛНЕНА "));
+}
 
 void Menu_3_5(){
 	LCDClear(2);
@@ -779,14 +760,12 @@ void prompt_for_water(){
 	//lcd.print(F("  Water  Added? "));
 	lcd.print(F(" Вода наполнена?  "));
 	LCD_Procedo();
-	Buzzer(1, 750);
 }
 
 void Resume(){
 	lcd.setCursor(1, 1);
 	lcd.print(F("   Возобновить?   "));
 	LCD_Procedo();
-	Buzzer(1, 750);
 }
 
 void PausaPompa(float Temp, int Time){
@@ -826,17 +805,10 @@ void Iodine(float Temp, int Time){
 
 void End(){
 	lcd.clear();
-
-	delay(500);
-	//Buzzer(3,250);
-
 	lcd.setCursor(4, 1);
 	lcd.print(F("Варка  сусла"));
 	lcd.setCursor(6, 2);
 	lcd.print(F("окончена"));
-
-	Buzzer(1, 3000);
-	delay(2500);
 }
 
 void PumpPrime(){
