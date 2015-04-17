@@ -1,5 +1,6 @@
 ﻿#define DEBUG	false		
 #define WIFI	false
+#define Sound	FALSE	//FALSE, PASSIVE or ACTIVE
 
 //libraries
 #include <EEPROM.h>
@@ -164,6 +165,31 @@ int v;
 return (int) &v - (__brkval == 0 ? (int) &__heap_start : (int) __brkval);
 }
 */
+
+
+void Beep(byte NumBeep, int Period)
+{
+#if Sound == PASSIVE
+	for (byte i = 0; i < NumBeep; i++)
+	{
+		for (long k = 0; k < 2400; k++) {
+			digitalWrite(Buzz, HIGH);
+			delayMicroseconds(208);
+			digitalWrite(Buzz, LOW);
+			delayMicroseconds(208);
+		}
+		delay(Period);
+	}
+#elif Sound == ACTIVE
+	for (byte i=0; i < NumBeep; i++){
+		digitalWrite (Buzz, HIGH);
+		delay(Period);
+		digitalWrite(Buzz, LOW);
+		delay(100);
+	}
+#endif
+}
+
 
 void Gradi(){
 	if (ScaleTemp == 0){
