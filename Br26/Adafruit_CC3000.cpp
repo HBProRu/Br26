@@ -253,7 +253,7 @@ bool Adafruit_CC3000::begin(uint8_t patchReq, bool useSmartConfigData)
 
   init_spi();
   
-  DEBUGPRINT_F("init\n\r");
+  DEBUGPRINT_F("Initialization CC3000\n\r");
   wdt_reset();
   wlan_init(CC3000_UsynchCallback,
             sendWLFWPatch, sendDriverPatch, sendBootLoaderPatch,
@@ -261,7 +261,7 @@ bool Adafruit_CC3000::begin(uint8_t patchReq, bool useSmartConfigData)
             WlanInterruptEnable,
             WlanInterruptDisable,
             WriteWlanPin);
-  DEBUGPRINT_F("start\n\r");
+  DEBUGPRINT_F("Start CC3000\n\r");
 
   wdt_reset();
   wlan_start(patchReq);
@@ -1142,6 +1142,30 @@ uint16_t Adafruit_CC3000::getHostByName(char *hostname, uint32_t *ip) {
 
 /**************************************************************************/
 /*!
+Checks if the device is connected or not
+
+@returns  True if connected
+*/
+/**************************************************************************/
+bool Adafruit_CC3000::checkInstalled(void)
+{
+	init_spi();
+	wdt_reset();
+	wlan_init(CC3000_UsynchCallback,
+		sendWLFWPatch, sendDriverPatch, sendBootLoaderPatch,
+		ReadWlanInterruptPin,
+		WlanInterruptEnable,
+		WlanInterruptDisable,
+		WriteWlanPin);
+	wdt_reset();
+
+	if (wlan_test())
+		_installed = true;
+	return _installed;
+}
+
+/**************************************************************************/
+/*!
     Checks if the device is connected or not
 
     @returns  True if connected
@@ -1151,6 +1175,7 @@ bool Adafruit_CC3000::checkConnected(void)
 {
   return cc3000Bitset.test(CC3000BitSet::IsConnected);
 }
+
 
 /**************************************************************************/
 /*!
@@ -1305,7 +1330,8 @@ Adafruit_CC3000_Client::Adafruit_CC3000_Client(void) {
   _socket = -1;
 }
 
-Adafruit_CC3000_Client::Adafruit_CC3000_Client(uint16_t s) {
+Adafruit_CC3000_Client::Adafruit_CC3000_Client(uint16_t s)
+{
   _socket = s; 
   bufsiz = 0;
   _rx_buf_idx = 0;

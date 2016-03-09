@@ -51,6 +51,8 @@
  #include "WProgram.h"
 #endif
 
+#define DEBUG_MODE                      (0)
+
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>

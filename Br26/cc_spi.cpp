@@ -67,6 +67,7 @@ extern uint8_t g_IRQnum, g_SPIspeed;
 #define eSPI_STATE_READ_FIRST_PORTION   (7)
 #define eSPI_STATE_READ_EOT             (8)
 
+
 /*
 these variables store the SPI configuration
 so they can be modified and restored
@@ -573,7 +574,8 @@ void SSIContReadOperation(void)
 /**************************************************************************/
 void WriteWlanPin( unsigned char val )
 {  
-  if (DEBUG_MODE)
+  if (DEBUG_MODE != 0)
+	//if (DEBUG)
   {
     DEBUGPRINT_F("\tCC3000: WriteWlanPin - ");
     DEBUGPRINT_DEC(val);

@@ -48,6 +48,7 @@
 //
 //*****************************************************************************
 #include <string.h>
+#include <util/delay.h>
 #include "cc_util_wlan.h"
 #include "cc_util_hci.h"
 #include "cc_spi.h"
@@ -56,6 +57,7 @@
 #include "cc_util_security.h"
 #include "cc_util_evnt_handler.h"
 #include "cc_util_debug.h"
+#include "Adafruit_CC3000.h"
 
 volatile sSimplLinkInformation tSLInformation;
 
@@ -99,7 +101,6 @@ unsigned char profileArray[SMART_CONFIG_PROFILE_SIZE];
 #define WLAN_ADD_PROFILE_WPA_PARAM_LEN			(44)
 #define WLAN_CONNECT_PARAM_LEN					(29)
 #define WLAN_SMART_CONFIG_START_PARAMS_LEN		(4)
-
 
 
 
@@ -261,6 +262,103 @@ void SpiReceiveHandler(void *pvBuffer)
 //
 //*****************************************************************************
 
+bool wlan_test()
+{
+
+	unsigned long ulSpiIRQState;
+
+	tSLInformation.NumberOfSentPackets = 0;
+	tSLInformation.NumberOfReleasedPackets = 0;
+	tSLInformation.usRxEventOpcode = 0;
+	tSLInformation.usNumberOfFreeBuffers = 0;
+	tSLInformation.usSlBufferLength = 0;
+	tSLInformation.usBufferSize = 0;
+	tSLInformation.usRxDataPending = 0;
+	tSLInformation.slTransmitDataError = 0;
+	tSLInformation.usEventOrDataReceived = 0;
+	tSLInformation.pucReceivedData = 0;
+
+
+	// Allocate the memory for the RX/TX data transactions
+	tSLInformation.pucTxCommandBuffer = (unsigned char *)wlan_tx_buffer;
+
+	// init spi
+	SpiOpen(SpiReceiveHandler);
+	_delay_ms(100);
+
+	// Check the IRQ line
+	ulSpiIRQState = tSLInformation.ReadWlanInterruptPin();
+
+	// ASIC 1273 chip enable: toggle WLAN EN line
+	tSLInformation.WriteWlanPin(WLAN_ENABLE);
+
+	DEBUGPRINT_F("Start wlan_start\r\n");
+
+	if (ulSpiIRQState)
+	{
+		// wait till the IRQ line goes low
+		DEBUGPRINT_F("k1:\r\n");
+		for (uint8_t k = 1; k<250; k++){
+			DEBUGPRINT_DEC(k);
+			if (tSLInformation.ReadWlanInterruptPin() != 0)
+				return true;
+			_delay_ms(10);
+		}
+	}
+	else
+	{
+		// wait till the IRQ line goes high and than low
+		DEBUGPRINT_F("k2:\r\n");
+		
+		for (uint8_t k = 1; k<250; k++){
+			DEBUGPRINT_DEC(k);
+			if (tSLInformation.ReadWlanInterruptPin() != 0)
+				break;
+			if (k == 249) {
+				DEBUGPRINT_DEC(k);
+				return false;
+			}
+			_delay_ms(200);
+		}
+
+		DEBUGPRINT_F("k3:\r\n");
+		for (uint8_t k = 1; k<250; k++){
+			DEBUGPRINT_DEC(k);
+			if (tSLInformation.ReadWlanInterruptPin() == 0)
+				return true;
+			_delay_ms(200);
+		}
+	}
+	return false;
+}
+
+//*****************************************************************************
+//
+//!  wlan_start
+//!
+//!  @param   usPatchesAvailableAtHost -  flag to indicate if patches available
+//!                                    from host or from EEPROM. Due to the
+//!                                    fact the patches are burn to the EEPROM
+//!                                    using the patch programmer utility, the
+//!                                    patches will be available from the EEPROM
+//!                                    and not from the host.
+//!
+//!  @return        none
+//!
+//!  @brief        Start WLAN device. This function asserts the enable pin of
+//!                the device (WLAN_EN), starting the HW initialization process.
+//!                The function blocked until device Initialization is completed.
+//!                Function also configure patches (FW, driver or bootloader)
+//!                and calls appropriate device callbacks.
+//!
+//!  @Note          Prior calling the function wlan_init shall be called.
+//!  @Warning       This function must be called after wlan_init and before any
+//!                 other wlan API
+//!  @sa            wlan_init , wlan_stop
+//!
+//
+//*****************************************************************************
+
 void
 wlan_start(unsigned short usPatchesAvailableAtHost)
 {
@@ -278,6 +376,7 @@ wlan_start(unsigned short usPatchesAvailableAtHost)
 	tSLInformation.usEventOrDataReceived = 0;
 	tSLInformation.pucReceivedData = 0;
 
+
 	// Allocate the memory for the RX/TX data transactions
 	tSLInformation.pucTxCommandBuffer = (unsigned char *)wlan_tx_buffer;
 
@@ -288,26 +387,30 @@ wlan_start(unsigned short usPatchesAvailableAtHost)
 	ulSpiIRQState = tSLInformation.ReadWlanInterruptPin();
 
 	// ASIC 1273 chip enable: toggle WLAN EN line
-	tSLInformation.WriteWlanPin( WLAN_ENABLE );
-
+	tSLInformation.WriteWlanPin(WLAN_ENABLE);
+	
 	if (ulSpiIRQState)
 	{
 		// wait till the IRQ line goes low
-		while(tSLInformation.ReadWlanInterruptPin() != 0)
+		while (tSLInformation.ReadWlanInterruptPin() != 0)
 		{
 		}
+
 	}
 	else
 	{
 		// wait till the IRQ line goes high and than low
-		while(tSLInformation.ReadWlanInterruptPin() == 0)
+		while (tSLInformation.ReadWlanInterruptPin() == 0)
 		{
 		}
 
-		while(tSLInformation.ReadWlanInterruptPin() != 0)
+
+		while (tSLInformation.ReadWlanInterruptPin() != 0)
 		{
 		}
+
 	}
+
 	DEBUGPRINT_F("SimpleLink start\n\r");
 	SimpleLink_Init_Start(usPatchesAvailableAtHost);
 

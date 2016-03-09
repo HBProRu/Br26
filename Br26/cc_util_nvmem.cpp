@@ -169,7 +169,8 @@ nvmem_write(unsigned long ulFileId, unsigned long ulLength, unsigned long
 	
 	memcpy((ptr + SPI_HEADER_SIZE + HCI_DATA_CMD_HEADER_SIZE + 
 					NVMEM_WRITE_PARAMS_LEN),buff,ulLength);
-#if (DEBUG_MODE == 1)
+//#if (DEBUG_MODE == 1)
+#if DEBUG == true
 	PRINT_F("Writing:\t");
 	for (uint8_t i=0; i<ulLength; i++) {
 	    PRINT_F("0x");
@@ -254,7 +255,8 @@ unsigned char nvmem_write_patch(unsigned long ulFileId, unsigned long spLength, 
 	  for (uint8_t i=0; i<SP_PORTION_SIZE; i++) {
 	    rambuffer[i] = pgm_read_byte(spData + i + offset);
 	  }
-#if (DEBUG_MODE == 1)
+//#if (DEBUG_MODE == 1)
+#if DEBUG == true
 	  PRINT_F("Writing: "); printDec16(offset); PRINT_F("\t");
 	  for (uint8_t i=0; i<SP_PORTION_SIZE; i++) {
 	    PRINT_F("0x");

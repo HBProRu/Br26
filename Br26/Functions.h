@@ -1,4 +1,7 @@
-﻿/*void Buzzer(byte NumBeep, int Period){
+﻿#define Buz false			//OFF or ON
+
+
+/*void Buzzer(byte NumBeep, int Period){
 for (byte i=0; i < NumBeep; i++){
 digitalWrite (Buzz, HIGH);
 delay (Period);
@@ -9,22 +12,24 @@ delay(100);
 
 
 
-void Buzzer(byte NumBeep, int Period)
-{
-	for (int i = 0; i < NumBeep; i++)
-	{
-		for (long k = 0; k < 2400; k++)
-		{
-			digitalWrite(Buzz, HIGH);
-			delayMicroseconds(208);
-			//delay(1);
-			digitalWrite(Buzz, LOW);
-			delayMicroseconds(208);
-			//delay(1);
-		}
-		delay(Period);
-	}
-}
+//void Buzzer(byte NumBeep, int Period)
+//{
+//#if Buz == false
+//	for (int i = 0; i < NumBeep; i++)
+//	{
+//		for (long k = 0; k < 2400; k++)
+//		{
+//			digitalWrite(Buzz, HIGH);
+//			delayMicroseconds(208);
+//			//delay(1);
+//			digitalWrite(Buzz, LOW);
+//			delayMicroseconds(208);
+//			//delay(1);
+//		}
+//		delay(Period);
+//	}
+//#endif
+//}
 
 void r_set(byte& data, int addr){
 	data = EEPROM.read(addr);

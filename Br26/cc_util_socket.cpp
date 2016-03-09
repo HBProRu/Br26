@@ -905,7 +905,8 @@ simple_link_recv(long sd, void *buf, long len, long flags, sockaddr *from,
 	
 	errno = tSocketReadEvent.iNumberOfBytes;
 
-#if (DEBUG_MODE == 1)
+//#if (DEBUG_MODE == 1)
+#if DEBUG == true
 	for (uint8_t i=0; i<errno; i++) {
 	  uart_putchar(((unsigned char *)buf)[i]);
 	}
