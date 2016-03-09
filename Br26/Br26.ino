@@ -1,6 +1,11 @@
-﻿#define DEBUG	false		
-#define WIFI	false
-#define Buzzer	FALSE	//FALSE, PASSIVE or ACTIVE
+﻿#define DEBUG		true
+#define DEBUG_WIFI	false
+#define WIFI		false
+//Use Buzzer
+//0 - FALSE
+//1 - PASSIVE
+//2 - ACTIVE
+#define Buzzer	0
 
 //libraries
 #include <EEPROM.h>
@@ -32,6 +37,23 @@
 
 // Supported PCB
 #include "Pcb_Uniholic.h"
+
+#include "DallasTemp.h"
+
+// Data wire is plugged into port 5 on the Arduino
+#define ONE_WIRE_BUS 19
+#define TEMPERATURE_PRECISION 9
+#define NumberOfDevices 4		// Set maximum number of devices in order to dimension 
+
+
+// Setup a oneWire instance to communicate with any OneWire devices (not just Maxim/Dallas temperature ICs)
+OneWire oneWire(ONE_WIRE_BUS);
+// Pass our oneWire reference to Dallas Temperature. 
+DallasTemperature sensors(&oneWire);
+
+DeviceAddress Thermometer;
+unsigned long last_request_conversion;
+
 
 // Porzioni di codice
 #include "Presentazione.h"
@@ -152,6 +174,15 @@ boolean wifi_enabled = false;
 #endif
 
 
+#if DEBUG == true
+#define DBGOUT(str) Serial.print(str)
+#define DBGOUTLN(str) Serial.println(str)
+#else
+#define DBGOUT(str)
+#define DBGOUTLN(str) Serial.println(str)
+#endif
+
+
 
 
 // ****************************************
@@ -169,7 +200,7 @@ return (int) &v - (__brkval == 0 ? (int) &__heap_start : (int) __brkval);
 
 void Beep(byte NumBeep, int Period)
 {
-#if Buzzer == PASSIVE
+#if Buzzer == 1
 	for (byte i = 0; i < NumBeep; i++)
 	{
 		for (long k = 0; k < 2400; k++) {
@@ -180,7 +211,7 @@ void Beep(byte NumBeep, int Period)
 		}
 		delay(Period);
 	}
-#elif Buzzer == ACTIVE
+#elif Buzzer == 2
 	for (byte i=0; i < NumBeep; i++){
 		digitalWrite (Buzz, HIGH);
 		delay(Period);
@@ -221,6 +252,7 @@ void pauseStage(){
 	}
 }
 
+/*
 void dsInizializza(){
 	//  Serial.println("dsInizializza");
 	ds.reset();
@@ -254,7 +286,7 @@ void Temperature(){// reads the DS18B20 temerature probe
 		for (byte i = 0; i < 9; i++) {           // with crc we need 9 bytes
 			data[i] = ds.read();
 		}
-		/* add this routine for crc version */
+		// add this routine for crc version 
 		if (OneWire::crc8(data, 8) != data[8]) {  //if checksum fails start a new conversion right away
 			//      Serial.println("checksum fails start a new conversion");
 			//ds.reset();
@@ -264,7 +296,7 @@ void Temperature(){// reads the DS18B20 temerature probe
 			ds.write(0x44, 0);
 			Conv_start = true;
 			return;
-			/*Fine Routine crc*/
+			//Fine Routine crc
 		}
 
 		unsigned int raw = (data[1] << 8) + data[0];
@@ -280,6 +312,16 @@ void Temperature(){// reads the DS18B20 temerature probe
 		Conv_start = false;
 		return;
 	}
+}
+
+*/
+
+void Temperature() {
+
+		if (sensors.isConversionAvailable(Thermometer)) {
+			Temp_Now = sensors.getTempC(Thermometer);
+			sensors.requestTemperatures();
+		}
 }
 
 /*
@@ -2210,7 +2252,6 @@ void setup(){
 	// Start up the library
 #if DEBUG == true
 	Serial.begin(115200);
-//#define DEBUG_MODE 1;
 #endif
 
 	Wire.begin();
@@ -2241,6 +2282,21 @@ void setup(){
 	pinMode(H_Led2, OUTPUT);
 	pinMode(P_Led, OUTPUT);
 	w_StartTime = millis();
+
+
+	sensors.begin();
+
+	sensors.setWaitForConversion(false);  // makes it async
+
+	byte dsCount = sensors.getDeviceCount();
+
+	// locate devices on the bus
+	DBGOUTLN("Locating devices...");
+	DBGOUT("Found ");
+	DBGOUTLN(dsCount);
+	DBGOUTLN(" devices.");
+
+	sensors.getAddress(Thermometer, 0);
 
 	//tell the PID to range between 0 and the full window size
 	myPID.SetMode(AUTOMATIC);
@@ -2447,8 +2503,22 @@ void loop() {
 	if (!wifi_enabled)
 	{
 		// Initialise the CC3000
-		Serial.println(F("\nInitialising the CC3000..."));
+		DBGOUTLN("Initialising the CC3000...");
+		//Serial.println(F("\nInitialising the CC3000..."));
 
+		//if (!cc3000.checkInstalled())
+		if (!cc3000.begin(2))
+		{
+			DBGOUTLN("CC3000 not installed");
+		}
+		else
+		{
+			DBGOUTLN("CC3000 installed");
+		}
+
+
+
+		/*
 		if (!cc3000.begin())
 		{
 			Serial.println(F("Unable to initialise the CC3000! Check your wiring?"));
@@ -2499,7 +2569,7 @@ void loop() {
 			Serial.println("\n");
 		}
 
-
+		*/
 		wifi_enabled = true;
 	}
 	
@@ -2538,3 +2608,4 @@ boolean cc3000_init()
 
 
 #endif
+

@@ -526,6 +526,9 @@ extern long wlan_smart_config_process(void);
 // Mark the end of the C bindings section for C++ compilers.
 //
 //*****************************************************************************
+
+bool     wlan_test();
+
 #ifdef	__cplusplus
 }
 #endif // __cplusplus

@@ -10,39 +10,45 @@ byte Language[8] = { B11111, B00010, B01000, B11111, B00000, B10001, B10101, B11
 
 //byte Ciclo=0;
 
-void LCDSpace(byte Num){
-	for (byte i = 0; i < Num; i++){
+void LCDSpace(byte Num) {
+	for (byte i = 0; i < Num; i++) {
 		lcd.print(F(" "));
 	}
 }
 
-void LCDClear(byte Riga){
+void LCDClear(byte Riga) {
 	lcd.setCursor(0, Riga);
 	LCDSpace(20);
 }
 
-void PrintTemp(float Temp){
-	if (Temp < 10.0)LCDSpace(2);
-	if (Temp >= 10.0 && Temp < 100.0)LCDSpace(1);
-	lcd.print(Temp);
-
+void PrintTemp(float Temp) {
+	if (Temp == DEVICE_DISCONNECTED_C || Temp == DEVICE_DISCONNECTED_F) {
+		LCDSpace(1);
+		lcd.print("--.--");
+	}
+	else
+	{
+		if (Temp < 10.0)LCDSpace(2);
+		if (Temp >= 10.0 && Temp < 100.0)LCDSpace(1);
+		lcd.print(Temp);
+	}
 	//Gradi();
 	lcd.write((byte)0);
 }
 
-void PrintTime(String time){
+void PrintTime(String time) {
 	//LCDClear(1);
 	lcd.setCursor(6, 1);
 	lcd.print(time);
 
 }
 
-void Clear_2_3(){
+void Clear_2_3() {
 	LCDClear(2);
 	LCDClear(3);
 }
 
-void Version(byte locX, byte locY){
+void Version(byte locX, byte locY) {
 	lcd.setCursor(locX, locY);
 	//lcd.print(Version20);
 	lcd.print(F("2.6.65a"));
@@ -50,27 +56,27 @@ void Version(byte locX, byte locY){
 	//lcd.print(char(0xAC));
 }
 
-void Intestazione(){
+void Intestazione() {
 	lcd.setCursor(0, 0);
 	//lcd.print(F("Open ArdBir "));
 	//Version(12,0);
 	lcd.print(F(" HBPro Brauholic v2 "));
 }
 
-void LCD_Procedo(){
+void LCD_Procedo() {
 	lcd.setCursor(1, 3);
 	lcd.print(F("Выберите:  Да  Нет"));
 }
 
 
-void LCD_Conferma(){
+void LCD_Conferma() {
 	lcd.setCursor(1, 3);
 	//  lcd.print(F("Continue: Yes  ---"));
 	lcd.print(F("Выберите:  Да  ---"));
 }
 
 
-void LCD_Default(float Temp){
+void LCD_Default(float Temp) {
 	Intestazione();
 
 	lcd.setCursor(6, 2);
@@ -82,15 +88,15 @@ void LCD_Default(float Temp){
 	lcd.print(F("---  РУЧ  АВТО УСТ"));
 }
 
-void CntDwn(int Time){
+void CntDwn(int Time) {
 	CountDown(Time, 11, 2, 2);
 }
 
-void Watch(int Time){
+void Watch(int Time) {
 	CountDown(Time, 6, 2, 2);
 }
 
-void PauseScreen(){
+void PauseScreen() {
 	lcd.setCursor(0, 0);
 	lcd.print(F("-----  "));
 	lcd.setCursor(13, 0);
@@ -102,39 +108,39 @@ void PauseScreen(){
 	lcd.print(F(" ----"));
 }
 
-void LCD_QQSO(){
+void LCD_QQSO() {
 	lcd.setCursor(1, 3);
 	//lcd.print(F("UP* *DWN skip   ok"));
 	lcd.print(F("верх низ  -->   "));
 	lcd.print(char(126));
 }
-void LCD_QQxO(){
+void LCD_QQxO() {
 	lcd.setCursor(1, 3);
 	//lcd.print(F("UP* *DWN  ---   ok"));
 	lcd.print(F("верх низ  ---   "));
 	lcd.print(char(126));
 }
-void LCD_SGEO(){
+void LCD_SGEO() {
 	lcd.setCursor(1, 3);
 	//lcd.print(F("up   dwn  quit  ok"));
 	lcd.print(F("верх низ выход  "));
 	lcd.print(char(126));
 }
-void LCD_xGEO(){
+void LCD_xGEO() {
 	lcd.setCursor(1, 3);
 	//lcd.print(F("---  dwn  quit  ok"));
 	lcd.print(F("---  низ выход  "));
 	lcd.print(char(126));
 }
 
-void LCD_SxEO(){
+void LCD_SxEO() {
 	lcd.setCursor(1, 3);
 	//lcd.print(F("up   ---  quit  ok"));
 	lcd.print(F("верх --- выход  "));
 	lcd.print(char(126));
 }
 
-void LCD_xxEO(){
+void LCD_xxEO() {
 	lcd.setCursor(1, 3);
 	//lcd.print(F("up   ---  quit  ok"));
 	lcd.print(F("--- --- выход  "));
@@ -142,7 +148,7 @@ void LCD_xxEO(){
 }
 
 
-void Menu_1(){
+void Menu_1() {
 	lcd.clear();
 
 	lcd.setCursor(4, 0);
@@ -150,7 +156,7 @@ void Menu_1(){
 	lcd.print(F("РУЧНОЙ РЕЖИМ"));
 }
 
-void Manuale(float Set, float Temp, float TempBoil){
+void Manuale(float Set, float Temp, float TempBoil) {
 	lcd.setCursor(1, 1);
 	PrintTemp(Temp);
 
@@ -165,7 +171,7 @@ void Manuale(float Set, float Temp, float TempBoil){
 }
 
 
-void Menu_2(){
+void Menu_2() {
 	lcd.clear();
 
 	//lcd.setCursor(3,0);
@@ -173,14 +179,14 @@ void Menu_2(){
 	lcd.setCursor(0, 0);
 	lcd.print(F("АВТОМАТИЧЕСКИЙ РЕЖИМ"));
 }
-void AddMalt(){
+void AddMalt() {
 	//lcd.setCursor(2,2);
 	lcd.setCursor(1, 2);
 	lcd.print(F(" Засыпь  внесена? "));
 	LCD_Procedo();
 }
 
-void Stage(byte Stage, float Set, float Temp){
+void Stage(byte Stage, float Set, float Temp) {
 	lcd.setCursor(0, 0);
 	lcd.print(F(" АВТО --> "));
 	lcd.print(stageName[Stage]);
@@ -198,26 +204,26 @@ void Stage(byte Stage, float Set, float Temp){
 	lcd.print(F("верх низ пауза -->"));
 }
 
-void SaltoStep(){
+void SaltoStep() {
 	lcd.setCursor(1, 2);
 	lcd.print(F("  Следующий шаг?  "));
 	LCD_Procedo();
 }
 
-void RemoveMalt(){
+void RemoveMalt() {
 	//lcd.setCursor(3,2);
 	lcd.setCursor(1, 2);
 	lcd.print(F("Дробина извлечена?"));
 	LCD_Procedo();
 }
 
-void Temp_Wait(float Temp){
+void Temp_Wait(float Temp) {
 	lcd.setCursor(1, 1);
 	PrintTemp(Temp);
 }
 
-void Boil(float Heat, float Temp, byte Tipo){
-	if (Tipo == 1){
+void Boil(float Heat, float Temp, byte Tipo) {
+	if (Tipo == 1) {
 		lcd.setCursor(0, 0);
 		lcd.print(F(" АВТО --> Варка     "));
 	}
@@ -233,12 +239,12 @@ void Boil(float Heat, float Temp, byte Tipo){
 	lcd.print(F("% "));
 }
 
-void NoBoil(){
+void NoBoil() {
 	lcd.setCursor(1, 2);
 	LCDSpace(9);
 }
 
-void HopAdd(byte HopAdd){
+void HopAdd(byte HopAdd) {
 	//lcd.setCursor(10,0);
 	lcd.setCursor(1, 0);
 	lcd.print(F("  Внесите  хмель  "));
@@ -248,13 +254,13 @@ void HopAdd(byte HopAdd){
 
 
 
-void Menu_3(){
+void Menu_3() {
 	lcd.clear();
 
 	lcd.setCursor(0, 0);
 	lcd.print(F("   МЕНЮ УСТАНОВОК   "));
 }
-void Menu_3_1(){
+void Menu_3_1() {
 	lcd.setCursor(1, 1);
 	lcd.print(F(" P.I.D. Параметры "));
 
@@ -262,17 +268,17 @@ void Menu_3_1(){
 
 	LCD_xGEO();
 }
-void Menu_3_1_x(byte i){
+void Menu_3_1_x(byte i) {
 	lcd.setCursor(1, 2);
 	lcd.print(PIDName[i]);
 	LCD_QQxO();
 }
 
-void PidSet(int pidSet, byte i){
+void PidSet(int pidSet, byte i) {
 	lcd.setCursor(14, 2);
 	if (i < 4)LCDSpace(1);
 
-	if (i < 3 || i == 4 || i == 6){
+	if (i < 3 || i == 4 || i == 6) {
 		if (pidSet <= -10 && pidSet > -100)LCDSpace(1);
 		if (pidSet<0 && pidSet>-10)LCDSpace(2);
 		if (pidSet < 10 && pidSet >= 0)LCDSpace(3);
@@ -280,7 +286,7 @@ void PidSet(int pidSet, byte i){
 		if (pidSet >= 100)LCDSpace(1);
 	}
 
-	if (i == 5){
+	if (i == 5) {
 		float OffSet = pidSet / 10.0;
 		if (OffSet >= 0)LCDSpace(1);
 		lcd.print(OffSet);
@@ -292,7 +298,7 @@ void PidSet(int pidSet, byte i){
 	if (i == 4)lcd.print(F("%"));
 }
 
-void Menu_3_2(){
+void Menu_3_2() {
 	lcd.setCursor(1, 1);
 	lcd.print(F("Параметры  системы"));
 
@@ -301,16 +307,16 @@ void Menu_3_2(){
 	LCD_SGEO();
 }
 
-void Menu_3_2_x(byte i){
+void Menu_3_2_x(byte i) {
 	lcd.setCursor(1, 2);
 	lcd.print(unitName[i]);
 	LCD_QQxO();
 }
 
-void UnitSet(byte unitSet, byte i){
+void UnitSet(byte unitSet, byte i) {
 	//lcd.setCursor(12,2);
 	lcd.setCursor(15, 2);
-	switch (i){
+	switch (i) {
 
 	case(0) :// Scala Temp
 		//lcd.setCursor(17,2);
@@ -380,52 +386,52 @@ void UnitSet(byte unitSet, byte i){
 }
 
 
-void Menu_3_3(){
+void Menu_3_3() {
 	lcd.setCursor(1, 1);
 	lcd.print(F("  Авто параметры  "));
 	LCD_SGEO();
 }
-void Menu_3_3_x(byte Stage){
+void Menu_3_3_x(byte Stage) {
 	lcd.setCursor(1, 2);
 	lcd.print(stageName[Stage]);
 	if (Stage == 0 || Stage == 6 || Stage == 7)LCD_QQxO();
 	else LCD_QQSO();
 }
 
-void StageSet(float Temp){
+void StageSet(float Temp) {
 	lcd.setCursor(12, 2);
 	PrintTemp(Temp);
 }
 
-void TimeSet(int Time){
+void TimeSet(int Time) {
 	lcd.setCursor(12, 2);
 	if (Time < 10)LCDSpace(5);
 	if (Time >= 10 && Time < 100)LCDSpace(4);
-	if (Time>100)LCDSpace(3);
+	if (Time > 100)LCDSpace(3);
 	lcd.print(Time);
 	lcd.print(F("'"));
 	LCD_QQxO();
 }
 
 
-void Menu_3_3_8(){
+void Menu_3_3_8() {
 	lcd.setCursor(1, 2);
 	lcd.print(F("Вносов хмеля    "));
 	LCD_QQxO();
 }
-void NumHops(byte SetNumHops){
+void NumHops(byte SetNumHops) {
 	lcd.setCursor(17, 2);
 	if (SetNumHops < 10)LCDSpace(1);
 	lcd.print(SetNumHops);
 }
 
-void Menu_3_3_9(){
+void Menu_3_3_9() {
 	lcd.setCursor(1, 2);
 	lcd.print(F("Варка         "));
 	LCD_QQxO();
 }
 
-void Menu_3_3_10(byte SetHop){
+void Menu_3_3_10(byte SetHop) {
 	lcd.setCursor(1, 2);
 	//lcd.print(F("№ хмеля ("));
 	lcd.print(F("Хмель "));
@@ -436,7 +442,7 @@ void Menu_3_3_10(byte SetHop){
 	LCD_QQxO();
 }
 
-void TimeHops(int Time){
+void TimeHops(int Time) {
 	lcd.setCursor(15, 2);
 	if (Time < 10)LCDSpace(2);
 	if (Time >= 10 && Time < 100)LCDSpace(1);
@@ -446,7 +452,7 @@ void TimeHops(int Time){
 
 
 
-void Menu_3_4(){
+void Menu_3_4() {
 	lcd.setCursor(1, 1);
 	lcd.print(F("Менеджер  рецептов"));
 
@@ -455,34 +461,34 @@ void Menu_3_4(){
 	LCD_SGEO();
 	//  LCD_SxEO();
 }
-void Menu_3_4_1(){
+void Menu_3_4_1() {
 	lcd.setCursor(1, 2);
 	lcd.print(F("    Загрузить     "));
 	LCD_xGEO();
 }
-void Menu_3_4_2(){
+void Menu_3_4_2() {
 	lcd.setCursor(1, 2);
 	lcd.print(F("    Сохранить     "));
 	LCD_SGEO();
 }
-void Menu_3_4_3(){
+void Menu_3_4_3() {
 	lcd.setCursor(1, 2);
 	lcd.print(F("     Удалить      "));
 	LCD_SGEO();
 }
-void Menu_3_4_4(){
+void Menu_3_4_4() {
 	lcd.setCursor(1, 2);
 	lcd.print(F("  Инициализация   "));
 	LCD_SxEO();
 }
 
-void NoRecipe(){
+void NoRecipe() {
 	LCDClear(2);
 	lcd.setCursor(1, 3);
 	lcd.print(F("Ничего не найдено "));
 }
 
-void Ricetta(byte numRicetta, byte Tipo){
+void Ricetta(byte numRicetta, byte Tipo) {
 	//Tipo 0 = Load
 	//Tipo 1 = Save
 
@@ -492,7 +498,7 @@ void Ricetta(byte numRicetta, byte Tipo){
 	lcd.print(F(" > "));
 
 	if (Tipo == 0)LCD_Procedo();
-	else{
+	else {
 		lcd.setCursor(1, 3);
 		//lcd.print(F("UP* *DWN  back  ok"));
 		lcd.print(F("верх низ  назад "));
@@ -500,18 +506,18 @@ void Ricetta(byte numRicetta, byte Tipo){
 	}
 }
 
-void LCD_NomeRicetta(byte pos, byte Lettera){
+void LCD_NomeRicetta(byte pos, byte Lettera) {
 	lcd.setCursor(pos + 7, 2);
 	lcd.print((char)Lettera);
 }
 
-void LeggoRicetta1(){
+void LeggoRicetta1() {
 	LCDClear(2);
 	lcd.setCursor(1, 3);
 	lcd.print(F("   Загрузка ...   "));
 }
 
-void LeggoRicetta2(byte Ricetta){
+void LeggoRicetta2(byte Ricetta) {
 	lcd.setCursor(1, 3);
 	//lcd.print(F("Setting "));
 	//lcd.print(F("Рецепт "));
@@ -524,7 +530,7 @@ void LeggoRicetta2(byte Ricetta){
 }
 
 
-void SalvataggioRicetta(byte Ricetta){
+void SalvataggioRicetta(byte Ricetta) {
 	lcd.setCursor(1, 2);
 	//lcd.print(F(" Save Setting  "));
 	lcd.print(F(" Сохр. рецепт "));
@@ -536,18 +542,18 @@ void SalvataggioRicetta(byte Ricetta){
 	LCD_Procedo();
 }
 
-void SalvaRicetta1(){
+void SalvaRicetta1() {
 	LCDClear(2);
 	lcd.setCursor(1, 3);
 	lcd.print(F("  Сохранение ...  "));
 }
 
-void SalvaRicetta2(){
+void SalvaRicetta2() {
 	lcd.setCursor(1, 3);
 	lcd.print(F(" Рецепт сохранен  "));
 }
 
-void CancelloRicetta(byte Ricetta){
+void CancelloRicetta(byte Ricetta) {
 	lcd.setCursor(0, 2);
 	//lcd.print(F(" Delete Setting "));
 	lcd.print(F(" Удал. рецепт "));
@@ -559,25 +565,25 @@ void CancelloRicetta(byte Ricetta){
 	LCD_Procedo();
 }
 
-void Cancellazione1(){
+void Cancellazione1() {
 	LCDClear(2);
 	lcd.setCursor(1, 3);
 	lcd.print(F("   Удаление ...   "));
 }
 
-void Cancellazione2(){
+void Cancellazione2() {
 	lcd.setCursor(1, 3);
 	lcd.print(F("  Рецепт удален   "));
 }
 
-void Inizializzazione(){
+void Inizializzazione() {
 	lcd.setCursor(1, 2);
 	lcd.print(F("  Инициализация   "));
 
 	LCD_Procedo();
 }
 
-void Inizializza(){
+void Inizializza() {
 	LCDClear(2);
 
 	lcd.setCursor(1, 3);
@@ -589,32 +595,32 @@ void Inizializza(){
 
 }
 
-void MemoriaPiena1(){
+void MemoriaPiena1() {
 	LCDClear(2);
 	lcd.setCursor(1, 3);
 	//lcd.print(F("    ATTENZIONE    "));
 	lcd.print(F("     ВНИМАНИЕ     "));
 }
 
-void MemoriaPiena2(){
+void MemoriaPiena2() {
 	lcd.setCursor(1, 3);
 	lcd.print(F(" ПАМЯТЬ ЗАПОЛНЕНА "));
 }
 
-void Menu_3_5(){
+void Menu_3_5() {
 	LCDClear(2);
 	lcd.setCursor(1, 1);
 	lcd.print(F(" Общие  настройки "));
 	LCD_SGEO();
 }
 
-void Menu_3_5_x(byte i){
+void Menu_3_5_x(byte i) {
 	lcd.setCursor(1, 2);
 	lcd.print(GeneralName[i]);
 	LCD_QQxO();
 }
 
-void Menu_3_6(){
+void Menu_3_6() {
 	lcd.setCursor(1, 1);
 	lcd.print(F("   Дата и время   "));
 	LCD_SxEO();
@@ -657,28 +663,28 @@ void PrintDatetimeM36(String datetime) {
 
 
 
-/*
-void Menu_4(){
-lcd.clear();
-lcd.setCursor(3,0);
-lcd.print(F("TEST DELLA RAM"));
-}
-void Menu_4_1(){
-lcd.setCursor(3,1);
-lcd.print(F("Memoria Libera"));
-lcd.setCursor(6,2);
-//if (freeRam()<1000&&freeRam()>=100)LCDSpace(1);
-if (freeRam()<100&&freeRam()>=10)LCDSpace(1);
-if (freeRam()<10)LCDSpace(2);
-lcd.print(freeRam());
-LCDSpace(2);
-lcd.print(F("byte"));
-LCDClear(3);
-delay(3500);
-lcd.clear();
-}
-*/
-void GeneralSet(int generalSet, byte i){
+  /*
+  void Menu_4(){
+  lcd.clear();
+  lcd.setCursor(3,0);
+  lcd.print(F("TEST DELLA RAM"));
+  }
+  void Menu_4_1(){
+  lcd.setCursor(3,1);
+  lcd.print(F("Memoria Libera"));
+  lcd.setCursor(6,2);
+  //if (freeRam()<1000&&freeRam()>=100)LCDSpace(1);
+  if (freeRam()<100&&freeRam()>=10)LCDSpace(1);
+  if (freeRam()<10)LCDSpace(2);
+  lcd.print(freeRam());
+  LCDSpace(2);
+  lcd.print(F("byte"));
+  LCDClear(3);
+  delay(3500);
+  lcd.clear();
+  }
+  */
+void GeneralSet(int generalSet, byte i) {
 	int generalSet_p;
 
 	switch (i)
@@ -731,14 +737,14 @@ void GeneralSet(int generalSet, byte i){
 		return;
 		} */
 
-	//lcd.print(generalSet);
+		//lcd.print(generalSet);
 
-	//if(i==4)lcd.print(F("%"));
+		//if(i==4)lcd.print(F("%"));
 
 }
 
 
-void Pause_Stage(float Temp, int Time){
+void Pause_Stage(float Temp, int Time) {
 	PauseScreen();
 
 	lcd.setCursor(1, 1);
@@ -755,20 +761,20 @@ void Pause_Stage(float Temp, int Time){
 	lcd.print(F("---  --- выход ---"));
 }
 
-void prompt_for_water(){
+void prompt_for_water() {
 	lcd.setCursor(1, 1);
 	//lcd.print(F("  Water  Added? "));
 	lcd.print(F(" Вода наполнена?  "));
 	LCD_Procedo();
 }
 
-void Resume(){
+void Resume() {
 	lcd.setCursor(1, 1);
 	lcd.print(F("   Возобновить?   "));
 	LCD_Procedo();
 }
 
-void PausaPompa(float Temp, int Time){
+void PausaPompa(float Temp, int Time) {
 	//  if (Ciclo>=225){
 	//    Buzzer(2,35);
 	//    Ciclo=0;
@@ -786,7 +792,7 @@ void PausaPompa(float Temp, int Time){
 	//  Ciclo++;
 }
 
-void Iodine(float Temp, int Time){
+void Iodine(float Temp, int Time) {
 	PauseScreen();
 
 
@@ -803,7 +809,7 @@ void Iodine(float Temp, int Time){
 	lcd.print(F("---  ---   Да  ---"));
 }
 
-void End(){
+void End() {
 	lcd.clear();
 	lcd.setCursor(4, 1);
 	lcd.print(F("Варка  сусла"));
@@ -811,12 +817,12 @@ void End(){
 	lcd.print(F("окончена"));
 }
 
-void PumpPrime(){
+void PumpPrime() {
 	lcd.setCursor(2, 1);
 	lcd.print(F("Прокачка насоса"));  // priming the pump
 }
 
-void ledHeatON(){
+void ledHeatON() {
 	lcd.setCursor(0, 1);
 	lcd.write(6);
 	lcd.setCursor(19, 1);
@@ -824,7 +830,7 @@ void ledHeatON(){
 
 }
 
-void ledHeatStatus(boolean mheat){
+void ledHeatStatus(boolean mheat) {
 	lcd.setCursor(0, 1);
 	if (mheat)lcd.write(5);
 	else LCDSpace(1);
@@ -833,23 +839,23 @@ void ledHeatStatus(boolean mheat){
 	else LCDSpace(1);
 }
 
-void ledPumpON(){
+void ledPumpON() {
 	lcd.setCursor(0, 2);
 	lcd.write(4);
 }
 
-void ledPumpStatus(boolean mpump){
+void ledPumpStatus(boolean mpump) {
 	lcd.setCursor(0, 2);
 	if (mpump)lcd.write(3);
 	else LCDSpace(1);
 }
 
-void ArdBir(){
+void ArdBir() {
 	Presentazione(2, 1);
 	ArdBir1(6, 1);
 }
 
-void PartenzaRitardata(){
+void PartenzaRitardata() {
 	Clear_2_3();
 	lcd.setCursor(1, 1);
 	lcd.print(F("Запустить  сейчас?"));
@@ -858,7 +864,7 @@ void PartenzaRitardata(){
 	LCD_Procedo();
 }
 
-void ImpostaTempo(unsigned long Time){
+void ImpostaTempo(unsigned long Time) {
 	lcd.setCursor(1, 1);
 	lcd.print(F("Установка отсрочки"));
 
@@ -867,13 +873,13 @@ void ImpostaTempo(unsigned long Time){
 	LCD_SGEO();
 }
 
-void StartDelay(unsigned long Tempo){
+void StartDelay(unsigned long Tempo) {
 	lcd.setCursor(1, 1);
 	lcd.print(F("   Запуск через   "));
 	CountDown(Tempo, 6, 2, 2);
 }
 
-void TemperaturaRaggiunta(){
+void TemperaturaRaggiunta() {
 	LCDClear(2);
 	lcd.setCursor(1, 2);
 	lcd.print(F("Темп-ра достигнута"));
