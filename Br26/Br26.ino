@@ -319,7 +319,8 @@ void Temperature(){// reads the DS18B20 temerature probe
 void Temperature() {
 
 		if (sensors.isConversionAvailable(Thermometer)) {
-			Temp_Now = sensors.getTempC(Thermometer);
+			float tt = sensors.getTempC(Thermometer);
+			Temp_Now = (tt != 85 ? tt : Temp_Now);
 			sensors.requestTemperatures();
 		}
 }
