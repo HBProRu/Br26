@@ -5,7 +5,7 @@
 //0 - FALSE
 //1 - PASSIVE
 //2 - ACTIVE
-#define Buzzer	0
+#define Buzzer	1
 
 //libraries
 #include <EEPROM.h>
@@ -42,7 +42,7 @@
 
 // Data wire is plugged into port 5 on the Arduino
 #define ONE_WIRE_BUS 19
-#define TEMPERATURE_PRECISION 9
+#define TEMPERATURE_PRECISION 12
 #define NumberOfDevices 4		// Set maximum number of devices in order to dimension 
 
 
@@ -320,6 +320,9 @@ void Temperature() {
 
 		if (sensors.isConversionAvailable(Thermometer)) {
 			float tt = sensors.getTempC(Thermometer);
+			if (tt == DEVICE_DISCONNECTED_C || tt == DEVICE_DISCONNECTED_F) {
+				Beep(1, 1);
+			}
 			Temp_Now = (tt != 85 ? tt : Temp_Now);
 			sensors.requestTemperatures();
 		}
@@ -2298,6 +2301,7 @@ void setup(){
 	DBGOUTLN(" devices.");
 
 	sensors.getAddress(Thermometer, 0);
+	sensors.setResolution(TEMPERATURE_PRECISION);
 
 	//tell the PID to range between 0 and the full window size
 	myPID.SetMode(AUTOMATIC);
