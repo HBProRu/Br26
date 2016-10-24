@@ -536,13 +536,13 @@ void pump_off(boolean mpump){
 
 void pump_prime(){
 	PumpPrime();
-
 	for (byte i = 1; i < 6; i++){
 		pump_on();
 		delay(750 + i * 250);
 		pump_off(mpump);
-		delay(350);
-	}Menu_2();
+		delay(3000);
+	}
+	Menu_2();
 }
 
 
