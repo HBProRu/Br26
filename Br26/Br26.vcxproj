@@ -44,10 +44,10 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino;C:\Program Files (x86)\Arduino\hardware\arduino\avr\variants\uniholicv15;d:\Gits\Br26\Br26;C:\Program Files (x86)\Arduino\hardware\arduino\avr\libraries\EEPROM;C:\Program Files (x86)\Arduino\hardware\arduino\avr\libraries\EEPROM\utility;C:\Program Files (x86)\Arduino\libraries\DHT;C:\Program Files (x86)\Arduino\libraries\DHT\utility;C:\Program Files (x86)\Arduino\libraries;C:\Program Files (x86)\Arduino\hardware\arduino\avr\libraries;C:\Program Files (x86)\Visual Micro\Visual Micro for Arduino\Micro Platforms\default\debuggers;C:\Users\ers\Documents\Arduino\libraries;c:\program files (x86)\arduino\hardware\tools\avr\avr\include\;c:\program files (x86)\arduino\hardware\tools\avr\avr\include\avr\;c:\program files (x86)\arduino\hardware\tools\avr\avr\;c:\program files (x86)\arduino\hardware\tools\avr\lib\gcc\avr\4.8.1\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <ForcedIncludeFiles>d:\Gits\Br26\Br26\Visual Micro\.Br26.vsarduino.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
-      <IgnoreStandardIncludePath>true</IgnoreStandardIncludePath>
-      <PreprocessorDefinitions>__AVR_ATmega1284p__;__AVR_ATmega1284P__;ARDUINO=161;ARDUINO_MAIN;__AVR__;__avr__;F_CPU=16000000L;__cplusplus;GCC_VERSION=40801;ARDUINO_ARCH_AVR;ARDUINO_AVR_UNIHOLIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>c:\FProg\Develop\arduino-1.6.9\hardware\arduino\avr\libraries\EEPROM\src;c:\FProg\Develop\arduino-1.6.9\hardware\arduino\avr\libraries\EEPROM\src\utility;c:\FProg\Develop\arduino-1.6.9\libraries;c:\FProg\Develop\arduino-1.6.9\hardware\arduino\avr\libraries;C:\Users\ers\Documents\Arduino\libraries;c:\FProg\Develop\arduino-1.6.9\hardware\arduino\avr\cores\arduino;c:\FProg\Develop\arduino-1.6.9\hardware\arduino\avr\variants\uniholicv15;g:\ersivv\Br26\Br26;c:\FProg\Develop\arduino-1.6.9\hardware\tools\avr/avr/include/;c:\FProg\Develop\arduino-1.6.9\hardware\tools\avr//avr/include/avr/;c:\FProg\Develop\arduino-1.6.9\hardware\tools\avr/lib\gcc\avr\4.8.1\include;C:\Program Files (x86)\Arduino\libraries\Adafruit_CC3000\utility;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <ForcedIncludeFiles>g:\ersivv\Br26\Br26\__vm\.Br26.vsarduino.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+      <IgnoreStandardIncludePath>false</IgnoreStandardIncludePath>
+      <PreprocessorDefinitions>__AVR_ATmega1284p__;__AVR_ATmega1284P__;F_CPU=16000000L;ARDUINO=10609;ARDUINO_AVR_UNIHOLIC;ARDUINO_ARCH_AVR;__cplusplus=201103L;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>

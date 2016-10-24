@@ -1,4 +1,4 @@
-﻿#define DEBUG		true
+﻿//#define DEBUG		false
 #define DEBUG_WIFI	false
 #define WIFI		false
 //Use Buzzer
@@ -252,7 +252,7 @@ void pauseStage(){
 	}
 }
 
-/*
+
 void dsInizializza(){
 	//  Serial.println("dsInizializza");
 	ds.reset();
@@ -306,27 +306,45 @@ void Temperature(){// reads the DS18B20 temerature probe
 		Temp_Now = (raw & 0xFFFC) * 0.0625;
 		if (ScaleTemp == 1)Temp_Now = Temp_Now * 1.8 + 32.0;
 
-		byte Correzione = word(EEPROM.read(9), EEPROM.read(10));
-		Temp_Now = Temp_Now + (Correzione / 10.0);
+		//byte Correzione = word(EEPROM.read(9), EEPROM.read(10));
+		//Temp_Now = Temp_Now + (Correzione / 10.0);
 
 		Conv_start = false;
 		return;
 	}
 }
 
-*/
 
+
+/*
 void Temperature() {
 
-		if (sensors.isConversionAvailable(Thermometer)) {
+	if(millis() < nextTimeTempRequest) {
+		return;
+	};
+
+	ds.reset();
+	ds.skip();
+
+	if (ds.read_bit() == 0) {
+		return;
+	}
+
+		//if (sensors.isConversionAvailable(Thermometer)) {
+			//Serial.print(millis() + " - ConversionAvailable");
 			float tt = sensors.getTempC(Thermometer);
+			//Serial.print(millis() + " - tt = " + (String)tt);
 			if (tt == DEVICE_DISCONNECTED_C || tt == DEVICE_DISCONNECTED_F) {
 				Beep(1, 1);
 			}
 			Temp_Now = (tt != 85 ? tt : Temp_Now);
 			sensors.requestTemperatures();
-		}
+			nextTimeTempRequest = millis() + 1000;
+			//Serial.print(millis() + " - Request temperature");
+		//} 
+		//Serial.print(millis() + " - Conversion");
 }
+*/
 
 /*
 void Temperature_WiFi()

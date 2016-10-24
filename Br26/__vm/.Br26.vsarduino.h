@@ -13,7 +13,7 @@
 #define __AVR_ATmega1284p__
 #define __AVR_ATmega1284P__
 #define F_CPU 16000000L
-#define ARDUINO 10605
+#define ARDUINO 10609
 #define ARDUINO_AVR_UNIHOLIC
 #define ARDUINO_ARCH_AVR
 #define __cplusplus 201103L
@@ -40,7 +40,6 @@
 #endif
 #define NEW_H
 typedef void *__builtin_va_list;
-typedef unsigned char byte;
 extern "C" void __cxa_pure_virtual() {;}
 
 
@@ -50,70 +49,55 @@ extern "C" void __cxa_pure_virtual() {;}
 #undef F
 #define F(string_literal) ((const PROGMEM char *)(string_literal))
 #undef PSTR
-#define PSTR(string_literal) ((const PROGMEM char *)(string_literal))
-#undef cli
-#define cli()
-#define pgm_read_byte(address_short)
-#define pgm_read_word(address_short)
-#define pgm_read_word2(address_short)
-#define digitalPinToPort(P)
-#define digitalPinToBitMask(P) 
-#define digitalPinToTimer(P)
-#define analogInPinToBit(P)
-#define portOutputRegister(P)
-#define portInputRegister(P)
-#define portModeRegister(P)
-#include <..\Br26\Br26.ino>
-#include <..\Br26\Adafruit_CC3000.cpp>
-#include <..\Br26\Adafruit_CC3000.h>
-#include <..\Br26\Adafruit_CC3000_Server.cpp>
-#include <..\Br26\Adafruit_CC3000_Server.h>
-#include <..\Br26\ArdBir1.h>
-#include <..\Br26\DS1307_Wire.h>
-#include <..\Br26\DallasTemp.cpp>
-#include <..\Br26\DallasTemp.h>
-#include <..\Br26\Functions.h>
-#include <..\Br26\LCD20x4_RUS.h>
-#include <..\Br26\LiquidCrystalRus.cpp>
-#include <..\Br26\LiquidCrystalRus.h>
-#include <..\Br26\OneWire.cpp>
-#include <..\Br26\OneWire.h>
-#include <..\Br26\PID_v1.cpp>
-#include <..\Br26\PID_v1.h>
-#include <..\Br26\Pcb_Uniholic.h>
-#include <..\Br26\Presentazione.h>
-#include <..\Br26\RTClib.cpp>
-#include <..\Br26\RTClib.h>
-#include <..\Br26\SPI.cpp>
-#include <..\Br26\SPI.h>
-#include <..\Br26\Uniholic.cpp>
-#include <..\Br26\Uniholic.h>
-#include <..\Br26\WiFi_CC3000.h>
-#include <..\Br26\Wire.cpp>
-#include <..\Br26\Wire.h>
-#include <..\Br26\cc_spi.cpp>
-#include <..\Br26\cc_spi.h>
-#include <..\Br26\cc_util_cc3000_common.cpp>
-#include <..\Br26\cc_util_cc3000_common.h>
-#include <..\Br26\cc_util_debug.cpp>
-#include <..\Br26\cc_util_debug.h>
-#include <..\Br26\cc_util_evnt_handler.cpp>
-#include <..\Br26\cc_util_evnt_handler.h>
-#include <..\Br26\cc_util_hci.cpp>
-#include <..\Br26\cc_util_hci.h>
-#include <..\Br26\cc_util_netapp.cpp>
-#include <..\Br26\cc_util_netapp.h>
-#include <..\Br26\cc_util_nvmem.cpp>
-#include <..\Br26\cc_util_nvmem.h>
-#include <..\Br26\cc_util_security.cpp>
-#include <..\Br26\cc_util_security.h>
-#include <..\Br26\cc_util_sntp.cpp>
-#include <..\Br26\cc_util_sntp.h>
-#include <..\Br26\cc_util_socket.cpp>
-#include <..\Br26\cc_util_socket.h>
-#include <..\Br26\cc_util_wlan.cpp>
-#include <..\Br26\cc_util_wlan.h>
-#include <C:\Program Files (x86)\Arduino\libraries\Adafruit_CC3000\utility\host_driver_version.h>
-#include <..\Br26\twi.c>
-#include <..\Br26\twi.h>
+#define PSTR(string_literal) ((const PROGMEM char *)(string_literal))")
+
+void Beep(byte NumBeep, int Period);
+void Gradi();
+void pauseStage();
+void dsInizializza();
+void Temperature();
+void PID_HEAT(boolean autoMode);
+void load_pid_settings();
+boolean wait_for_confirm(boolean& test, byte Stato, byte Tipo, byte Display);
+void quit_mode(boolean& processLoop);
+void allOFF();
+void heat_on();
+void heat_off(boolean mheat);
+void heat_control();
+void pump_on();
+void pump_off(boolean mpump);
+void pump_prime();
+void pump_control();
+void pump_rest(byte stage);
+void start_time();
+void Timing(byte stage, boolean Test, byte Type);
+void hop_add();
+void stage_loop();
+void add_malt();
+void Iodine_Test();
+void remove_malt();
+void manual_mode();
+void WaitStart();
+void Temperatura_Raggiunta();
+void auto_mode();
+void set_PID();
+void set_Unit();
+void set_Stages();
+void set_General();
+void set_DateTime();
+byte Congruita(byte& numRicetta, byte Verso);
+void loadRecipe();
+void saveRecipe();
+void deleteRecipe();
+void initializeRecipe();
+void RecipeMenu();
+void set_hops();
+void setup_mode();
+//
+String getTimeNowStr();
+String getDateTimeNowStr();
+String dateElementStr(String str);
+//
+boolean cc3000_init();
+#include "Br26.ino"
 #endif
